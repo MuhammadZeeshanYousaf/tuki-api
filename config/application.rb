@@ -24,7 +24,7 @@ module TukiApi
     config.load_defaults 7.1
 
     # This also configures session_options for use below
-    config.session_store :cookie_store, key: '_interslice_session'
+    config.session_store :cookie_store, key: 'auth_user_session'
 
     # Required for all session management (regardless of session_store)
     config.middleware.use ActionDispatch::Cookies
@@ -48,5 +48,8 @@ module TukiApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # default base url for mailer and routes names
+    config.action_mailer.default_url_options = { host: ENV.fetch('HOST_URL') { "http://localhost:#{ENV['PORT'] || 3000}" }  }
   end
 end

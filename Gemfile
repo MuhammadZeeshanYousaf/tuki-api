@@ -43,9 +43,11 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem "dotenv-rails", "~> 2.8"
+  
 end
 
-
+# App specific gems
 gem "devise", "~> 4.9"
 gem "devise-jwt", "~> 0.11.0"
 gem "rack-cors", "~> 2.0"

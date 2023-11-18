@@ -5,7 +5,7 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
 
   def respond_with(_resource, _opts = {})
     render json: {
-      message: 'You are logged in.',
+      message: 'Logged in successfully.',
       user: current_api_v1_user
     }, status: :ok
   end
@@ -17,10 +17,10 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_success
-    render json: { message: 'You are logged out.' }, status: :ok
+    render json: { message: 'Logged out successfully.' }, status: :ok
   end
 
   def log_out_failure
-    render json: { message: 'Failed to logout.' }, status: :unauthorized
+    render json: { error: 'Failed to logout.' }, status: :unauthorized
   end
 end

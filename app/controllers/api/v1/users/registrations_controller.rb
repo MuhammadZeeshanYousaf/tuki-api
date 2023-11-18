@@ -6,7 +6,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   def respond_with(resource, _opts = {})
     register_success && return if resource.persisted?
 
-    register_failed
+    register_failed(resource.errors.full_messages.to_sentence)
   end
 
   def register_success
@@ -16,7 +16,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
     }, status: :ok
   end
 
-  def register_failed
-    render json: { message: 'Something went wrong!' }, status: :unprocessable_entity
+  def register_failed(err)
+    render json: { error: err }, status: :unprocessable_entity
   end
 end
