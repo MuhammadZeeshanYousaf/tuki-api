@@ -7,4 +7,19 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      devise_for :users,
+                 controllers: {
+                   sessions: 'api/v1/users/sessions',
+                   registrations: 'api/v1/users/registrations'
+                 },
+                 defaults: { format: :json }
+
+      # Other routes
+      get 'members', to: 'members#show'
+
+    end
+  end
+
 end
