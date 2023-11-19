@@ -1,8 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.2.2
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+FROM ruby:3.2.2 as base
 
 # Rails app lives here
 WORKDIR /rails
@@ -17,9 +16,11 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
-# Install packages needed to build gems
+# Install packages needed to build gems and for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config bash bash-completion libffi-dev tzdata postgresql
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config bash bash-completion libffi-dev tzdata curl postgresql postgresql-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists /usr/share/doc /usr/share/man /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -36,11 +37,6 @@ RUN bundle exec bootsnap precompile app/ lib/
 
 # Final stage for app image
 FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
