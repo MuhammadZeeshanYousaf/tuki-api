@@ -3,7 +3,8 @@ class Role < ApplicationRecord
     member: 0,
     guard: 1,
     admin: 2,
-    super_admin: 3
+    super_admin: 3,
+    guest: 4
   }
 
   has_many :assignments
