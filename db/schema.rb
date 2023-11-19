@@ -12,18 +12,19 @@
 
 ActiveRecord::Schema[7.1].define(version: 2023_11_19_083308) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "assignments", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "role_id", null: false
+    t.uuid "user_id", null: false
+    t.uuid "role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["role_id"], name: "index_assignments_on_role_id"
     t.index ["user_id"], name: "index_assignments_on_user_id"
   end
 
-  create_table "communities", force: :cascade do |t|
+  create_table "communities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -37,7 +38,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_083308) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
-  create_table "roles", force: :cascade do |t|
+  create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.integer "key", default: 0
     t.datetime "created_at", null: false
@@ -45,7 +46,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_083308) do
     t.index ["key"], name: "index_roles_on_key", unique: true
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -58,8 +59,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_083308) do
     t.string "contact"
     t.string "national_id"
     t.date "birthdate"
-    t.boolean "is_fined"
-    t.bigint "community_id"
+    t.uuid "community_id"
     t.index ["community_id"], name: "index_users_on_community_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["national_id"], name: "index_users_on_national_id"
