@@ -4,10 +4,8 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(_resource, _opts = {})
-    render json: {
-      message: 'Logged in successfully.',
-      user: current_api_v1_user
-    }, status: :ok
+    render json: current_api_v1_user, serializer: Api::V1::UserSerializer,
+           meta: 'Logged in successfully.', meta_key: :message, status: :ok
   end
 
   def respond_to_on_destroy
