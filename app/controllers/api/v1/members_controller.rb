@@ -1,3 +1,5 @@
+# @Todo - Remove the test controller
+
 class Api::V1::MembersController < ApplicationController
     before_action :authenticate_api_v1_user!
 

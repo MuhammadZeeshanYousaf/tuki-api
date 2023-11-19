@@ -22,8 +22,11 @@ Rails.application.routes.draw do
                  },
                  defaults: { format: :json }
 
-      # Other routes
+      # @Todo - Remove the test route
       get 'members', to: 'members#show'
+
+      # Other routes
+      resources :communities
 
     end
   end

@@ -68,4 +68,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # customize rails generator workflow
+  config.generators do |g|
+    g.test_framework :rspec
+  end
 end
