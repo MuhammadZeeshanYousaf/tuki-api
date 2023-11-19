@@ -8,7 +8,7 @@ class Api::V1::CommunitiesController < ApplicationController
     render json: @communities, each_serializer: Api::V1::CommunitySerializer
   end
 
-  # GET /communities/1
+  # GET /communities/:id
   def show
     render json: @community, serializer: Api::V1::CommunitySerializer
   end
@@ -18,9 +18,10 @@ class Api::V1::CommunitiesController < ApplicationController
     @community = Community.new(community_params)
 
     if @community.save
-      render json: @community, status: :created, location: api_v1_community_url(@community, only_path: true)
+      render json: @community, serializer: Api::V1::CommunitySerializer,
+             status: :created, location: api_v1_community_url(@community, only_path: true)
     else
-      render json: @community.errors, status: :unprocessable_entity
+      render json: { error: full_error(@community) }, status: :unprocessable_entity
     end
   end
 
@@ -33,7 +34,7 @@ class Api::V1::CommunitiesController < ApplicationController
     end
   end
 
-  # DELETE /communities/1
+  # DELETE /communities/:id
   def destroy
     @community.destroy!
   end

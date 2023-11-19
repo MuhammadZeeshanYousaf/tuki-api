@@ -26,7 +26,9 @@ Rails.application.routes.draw do
       get 'members', to: 'members#show'
 
       # Other routes
-      resources :communities
+      resources :communities, shallow: true do
+        resources :apartments
+      end
 
     end
   end
