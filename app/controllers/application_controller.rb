@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :authenticate_api_v1_user!
 
   protected
 
@@ -15,4 +16,9 @@ class ApplicationController < ActionController::API
     #   u.permit({ roles: [] }, :email, :password, :password_confirmation, :avatar,:current_password, :about,:user, :name)
     # end
   end
+
+  def full_error(obj)
+    obj&.errors&.full_messages&.to_sentence
+  end
+
 end
