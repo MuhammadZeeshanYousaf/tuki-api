@@ -83,5 +83,3 @@ test:
 production:
   <<: *default
   database: tuki_api_production
-  username: tuki_api
-  password: <%= ENV["TUKI_API_DATABASE_PASSWORD"] %>
