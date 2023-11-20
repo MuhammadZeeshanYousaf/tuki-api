@@ -2,18 +2,16 @@ version: '3.7'
 services:
   db:
     image: postgres:latest
+    container_name: tuki_api_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     command:
       "postgres -c 'max_connections=500'"
     env_file:
       - ./.env
-    ports:
-      - "5432:5432/tcp"
-    networks:
-      - tuki_api
 
   app:
+    container_name: tuki_api_app
     build: ./
     command: "./bin/rails server"
     env_file:
@@ -24,15 +22,7 @@ services:
       - db  # add all dependant container
     ports:
       - "3000:3000"
-    networks:
-      - tuki_api
 
 volumes:
   postgres_data: {}
   app_storage: {}
-
-# define the network, so that containers that reside on this same network can talk to each other
-# via their `container_names`
-networks:
-  tuki_api:
-    driver: bridge
