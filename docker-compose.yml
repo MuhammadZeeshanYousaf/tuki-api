@@ -9,6 +9,8 @@ services:
       "postgres -c 'max_connections=500'"
     env_file:
       - ./.env
+    ports:
+      - '5436:5432'
 
   app:
     container_name: tuki_api_app
