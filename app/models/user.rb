@@ -8,4 +8,17 @@ class User < ApplicationRecord
   has_many :roles, through: :assignments
   belongs_to :community
 
+
+  # @param role_key[Symbol|String]
+  # @return [Boolean]
+  def role?(role_key)
+    !!(roles&.reduce(false) do |accum, role|
+      if role_key.to_s.eql?('admin_or_super')
+        accum || role.admin? || role.super_admin?
+      else
+        accum || role.send(role_key.to_s + '?')
+      end
+    end)
+  end
+
 end
