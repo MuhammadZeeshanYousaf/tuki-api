@@ -46,6 +46,6 @@ class Api::V1::OwnersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def owner_params
-      params.require(:owner).permit(:user_id, :apartment_id, :owner_id)
+      params.require(:owner).permit(:user_id, :apartment_id, :ownership_id)
     end
 end
