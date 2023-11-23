@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_23_083906) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_23_093953) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -37,6 +37,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_23_083906) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "guests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false, comment: "A temporary member account will be created for guest."
+    t.integer "type", default: 0, comment: "Guest can be a regular or working guest."
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_guests_on_user_id"
   end
 
   create_table "jwt_denylists", force: :cascade do |t|
@@ -100,6 +108,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_23_083906) do
   add_foreign_key "apartments", "communities"
   add_foreign_key "assignments", "roles"
   add_foreign_key "assignments", "users"
+  add_foreign_key "guests", "users"
   add_foreign_key "owners", "apartments"
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"
