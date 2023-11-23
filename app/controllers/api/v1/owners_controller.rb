@@ -3,7 +3,7 @@ class Api::V1::OwnersController < ApplicationController
 
   # GET /owners
   def index
-    @owners = Owner.find_by! owner_id: params[:owner_id]
+    @owners = Owner.where apartment_id: params[:apartment_id]
 
     render json: @owners, each_serializer: Api::V1::OwnerSerializer
   end
