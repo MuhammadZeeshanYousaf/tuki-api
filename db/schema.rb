@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_23_074454) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_23_083906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -66,6 +66,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_23_074454) do
     t.index ["key"], name: "index_roles_on_key", unique: true
   end
 
+  create_table "tenants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "owner_id", null: false
+    t.uuid "tenantship_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_tenants_on_owner_id"
+    t.index ["tenantship_id"], name: "index_tenants_on_tenantship_id"
+    t.index ["user_id"], name: "index_tenants_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -92,4 +103,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_23_074454) do
   add_foreign_key "owners", "apartments"
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"
+  add_foreign_key "tenants", "owners"
+  add_foreign_key "tenants", "tenants", column: "tenantship_id"
+  add_foreign_key "tenants", "users"
 end

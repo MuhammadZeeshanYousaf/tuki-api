@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       resources :communities, shallow: true do
         resources :apartments do
           resources :owners
+          resources :tenants
         end
       end
 
