@@ -27,7 +27,9 @@ Rails.application.routes.draw do
 
       # Other routes
       resources :communities, shallow: true do
-        resources :apartments
+        resources :apartments do
+          resources :owners
+        end
       end
 
     end

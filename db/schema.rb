@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_19_125236) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_23_074454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -47,6 +47,17 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_125236) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "owners", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "apartment_id", null: false
+    t.uuid "ownership_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["apartment_id"], name: "index_owners_on_apartment_id"
+    t.index ["ownership_id"], name: "index_owners_on_ownership_id"
+    t.index ["user_id"], name: "index_owners_on_user_id"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.integer "key", default: 0
@@ -78,4 +89,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_125236) do
   add_foreign_key "apartments", "communities"
   add_foreign_key "assignments", "roles"
   add_foreign_key "assignments", "users"
+  add_foreign_key "owners", "apartments"
+  add_foreign_key "owners", "owners", column: "ownership_id"
+  add_foreign_key "owners", "users"
 end
