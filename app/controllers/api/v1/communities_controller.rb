@@ -1,4 +1,5 @@
 class Api::V1::CommunitiesController < ApplicationController
+  before_action :authenticate_super_admin!, except: [ :show ]
   before_action :set_community, only: %i[ show update destroy ]
 
   # GET /communities
