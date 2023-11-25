@@ -4,21 +4,11 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
-  has_many :assignments
-  has_many :roles, through: :assignments
+  has_one :assignment
+  has_one :role, through: :assignment
   belongs_to :community
 
+  delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
 
-  # @param role_key[Symbol|String]
-  # @return [Boolean]
-  def role?(role_key)
-    !!(roles&.reduce(false) do |accum, role|
-      if role_key.to_s.eql?('admin_or_super')
-        accum || role.admin? || role.super_admin?
-      else
-        accum || role.send(role_key.to_s + '?')
-      end
-    end)
-  end
 
 end

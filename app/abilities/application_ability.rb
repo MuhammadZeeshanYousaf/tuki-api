@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-class Ability
+class ApplicationAbility
   include CanCan::Ability
 
   def initialize(user)
-    can :read, :user
-    cannot :manage, :admin
     # Define abilities for the user here. For example:
     #
     #   return unless user.present?
