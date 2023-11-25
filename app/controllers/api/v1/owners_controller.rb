@@ -1,4 +1,4 @@
-class Api::V1::OwnersController < ApplicationController
+class Api::V1::OwnersController < Api::V1::BaseController
   before_action :set_owner, only: %i[ show update destroy ]
 
   # GET /owners

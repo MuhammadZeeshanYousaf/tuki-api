@@ -1,4 +1,4 @@
-class Api::V1::TenantsController < ApplicationController
+class Api::V1::TenantsController < Api::V1::BaseController
   before_action :set_tenant, only: %i[ show update destroy ]
 
   # GET /tenants

@@ -1,6 +1,6 @@
 # @Todo - Remove the test controller
 
-class Api::V1::MembersController < ApplicationController
+class Api::V1::MembersController < Api::V1::BaseController
 
     def show
       puts 'AUTHENTICATED USER:', current_api_v1_user.inspect
