@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_26_110411) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_26_112743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -121,12 +121,32 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_26_110411) do
     t.index ["community_id"], name: "index_quinchos_on_community_id"
   end
 
+  create_table "reservations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "reservable_type", null: false
+    t.uuid "reservable_id", null: false
+    t.integer "reserved_hours", comment: "Number of hours for an amenity is reserved. ( No more than 24)"
+    t.float "rent_paid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reservable_type", "reservable_id"], name: "index_reservations_on_reservable"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.integer "key", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_roles_on_key", unique: true
+  end
+
+  create_table "sport_courts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "community_id", null: false
+    t.string "name"
+    t.string "sport", comment: "Sport / Game name which is offered in the sport_court."
+    t.float "rent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_sport_courts_on_community_id"
   end
 
   create_table "tenants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -193,6 +213,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_26_110411) do
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"
   add_foreign_key "quinchos", "communities"
+  add_foreign_key "sport_courts", "communities"
   add_foreign_key "tenants", "owners"
   add_foreign_key "tenants", "tenants", column: "tenantship_id"
   add_foreign_key "tenants", "users"
