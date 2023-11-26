@@ -47,6 +47,7 @@ Rails.application.routes.draw do
           resources :owners
           resources :tenants
         end
+        resources :quinchos
       end
 
       resources :guests
