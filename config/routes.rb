@@ -32,6 +32,8 @@ Rails.application.routes.draw do
         get :dashboard
       end
 
+      resources :invitations
+
       resources :communities, shallow: true do
         resources :apartments do
           resources :owners
