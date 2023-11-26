@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_26_081634) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_26_085238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -47,6 +47,19 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_26_081634) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "community_id", null: false
+    t.string "name"
+    t.text "description"
+    t.integer "seats", comment: "Available seats"
+    t.datetime "started_at", comment: "When to start"
+    t.datetime "ended_at", comment: "When to end"
+    t.datetime "expired_at", comment: "If event happens for multiple days, then expiry date and time."
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_events_on_community_id"
   end
 
   create_table "guests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -130,6 +143,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_26_081634) do
   add_foreign_key "apartments", "communities"
   add_foreign_key "assignments", "roles"
   add_foreign_key "assignments", "users"
+  add_foreign_key "events", "communities"
   add_foreign_key "guests", "users"
   add_foreign_key "invitations", "guests"
   add_foreign_key "invitations", "users"
