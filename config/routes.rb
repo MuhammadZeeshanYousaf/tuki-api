@@ -48,6 +48,8 @@ Rails.application.routes.draw do
           resources :tenants
         end
         resources :quinchos
+        resources :sport_courts
+        resources :reservations
       end
 
       resources :guests
