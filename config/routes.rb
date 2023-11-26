@@ -21,8 +21,7 @@ Rails.application.routes.draw do
                  controllers: {
                    sessions: 'api/v1/users/sessions',
                    registrations: 'api/v1/users/registrations'
-                 },
-                 defaults: { format: :json }
+                 }
 
       # @Todo - Remove the test route
       get 'members', to: 'members#show'
