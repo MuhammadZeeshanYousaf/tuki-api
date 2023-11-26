@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_26_103721) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_26_110411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -111,6 +111,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_26_103721) do
     t.index ["user_id"], name: "index_owners_on_user_id"
   end
 
+  create_table "quinchos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "community_id", null: false
+    t.string "name"
+    t.text "description"
+    t.boolean "is_grilled", default: false, comment: "Some Barbecue areas (Quinchos) have grills, others don't"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["community_id"], name: "index_quinchos_on_community_id"
+  end
+
   create_table "roles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.integer "key", default: 0
@@ -182,6 +192,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_26_103721) do
   add_foreign_key "owners", "apartments"
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"
+  add_foreign_key "quinchos", "communities"
   add_foreign_key "tenants", "owners"
   add_foreign_key "tenants", "tenants", column: "tenantship_id"
   add_foreign_key "tenants", "users"
