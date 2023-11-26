@@ -1,4 +1,4 @@
-class Api::V1::BaseController < Api::V1::BaseController
+class Api::V1::BaseController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :authenticate_super_admin!, if: -> { current_api_v1_user.role_super_admin? }
 

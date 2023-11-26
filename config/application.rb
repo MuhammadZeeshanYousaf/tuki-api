@@ -24,7 +24,7 @@ module TukiApi
     config.load_defaults 7.1
 
     # This also configures session_options for use below
-    config.session_store :cookie_store, key: 'auth_user_session'
+    config.session_store :cookie_store, key: 'auth_session'
 
     # Required for all session management (regardless of session_store)
     config.middleware.use ActionDispatch::Cookies
