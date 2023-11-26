@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       end
 
       resources :invitations
+      resources :announcements
 
       resources :communities, shallow: true do
         resources :apartments do

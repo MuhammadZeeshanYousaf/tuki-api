@@ -1,4 +1,4 @@
-class InvitationSerializer < ActiveModel::Serializer
+class Api::V1::InvitationSerializer < ActiveModel::Serializer
   attributes :id, :email, :status
   has_one :user
   has_one :guest
