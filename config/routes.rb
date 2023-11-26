@@ -35,7 +35,9 @@ Rails.application.routes.draw do
       resources :invitations
       resources :announcements
       resources :events, shallow: true do
-        resources :tickets
+        resources :tickets do
+          resources :bookings
+        end
       end
 
       resources :communities, shallow: true do
