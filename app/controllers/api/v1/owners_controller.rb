@@ -8,7 +8,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
     co_owners_count = @owner.co_owners.count
     tenants_count = @owner.tenants.count
     bookings_count = @owner.bookings.count
-    community_events = SerializableResource.new(@community.events, each_serializer: Api::V1::EventSerializer).serializable_hash[:events]
+    community_events = ::ActiveModel::SerializableResource.new(@community.events, each_serializer: Api::V1::EventSerializer).serializable_hash[:events]
 
     render json: {
       co_owners: co_owners_count,
@@ -22,8 +22,6 @@ class Api::V1::OwnersController < Api::V1::BaseController
   def co_owners
     render json: @owner.co_owners, each_serializer: Api::V1::OwnerSerializer, root: 'co_owners'
   end
-
-
 
   # GET /owners
   def index

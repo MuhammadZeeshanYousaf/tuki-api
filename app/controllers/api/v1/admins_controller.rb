@@ -7,12 +7,13 @@ class Api::V1::AdminsController < Api::V1::BaseController
     owners_count = @community.owners.count
     guests_count = 0
     bookings_count = 0
+    community_events = ::ActiveModel::SerializableResource.new(@community.events, each_serializer: Api::V1::EventSerializer).serializable_hash[:events]
 
     render json: {
       owners: owners_count,
       guests: guests_count,
       bookings: bookings_count,
-      events: []
+      events: community_events
     }
   end
 
