@@ -11,7 +11,8 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # GET /events/1
   def show
-    render json: @event
+    authorize! :read, Event
+    render json: @event, serializer: Api::V1::EventSerializer
   end
 
   # POST /events
@@ -31,22 +32,30 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # PATCH/PUT /events/1
   def update
+    authorize! :update, @event
     if @event.update(event_params)
-      render json: @event
+      if ticket_params.present? && @event.ticket.present? && @event.ticket.update(ticket_params)
+        render json: @event, serializer: Api::V1::EventSerializer
+      elsif @event.ticket&.errors&.any?
+        render json: { error: full_error(@event.ticket) }, status: :unprocessable_entity
+      else
+        render json: @event, serializer: Api::V1::EventSerializer
+      end
     else
-      render json: @event.errors, status: :unprocessable_entity
+      render json: { error: full_error(@event) }, status: :unprocessable_entity
     end
   end
 
   # DELETE /events/1
   def destroy
+    authorize! :destroy, @event
     @event.destroy!
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = @community.events.find_by(id: params[:id])
     end
 
     # Only allow a list of trusted parameters through.
