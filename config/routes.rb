@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
       scope :owner, controller: :owners do
         get :dashboard
+        get :co_owners
       end
 
       resources :invitations

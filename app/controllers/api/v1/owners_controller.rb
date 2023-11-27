@@ -1,6 +1,7 @@
 class Api::V1::OwnersController < Api::V1::BaseController
-  before_action :set_owner, only: %i[ dashboard show update destroy ]
+  before_action :set_owner, only: %i[ dashboard co_owners show update destroy ]
 
+  # GET /owner/dashboard
   def dashboard
     authorize! :manage, :dashboard
 
@@ -16,6 +17,13 @@ class Api::V1::OwnersController < Api::V1::BaseController
       events: community_events
     }
   end
+
+  # GET /owner/co_owners
+  def co_owners
+    render json: @owner.co_owners, each_serializer: Api::V1::OwnerSerializer, root: 'co_owners'
+  end
+
+
 
   # GET /owners
   def index
