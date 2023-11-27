@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_27_105930) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_27_120946) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -65,11 +65,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_27_105930) do
     t.string "name"
     t.text "description"
     t.integer "seats", comment: "Available seats"
-    t.datetime "started_at", comment: "When to start"
-    t.datetime "ended_at", comment: "When to end"
-    t.datetime "expired_at", comment: "If event happens for multiple days, then expiry date and time."
+    t.datetime "start_time", comment: "When to start"
+    t.datetime "end_time", comment: "When to end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "start_date", comment: "Date on the event start and end."
+    t.date "end_date", comment: "Date on the event start and end."
     t.index ["community_id"], name: "index_events_on_community_id"
   end
 
