@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_one :role, through: :assignment
   belongs_to :community
   has_one :owner
+  has_many :bookings
 
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_27_120946) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_27_131301) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -110,6 +110,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_27_120946) do
     t.index ["apartment_id"], name: "index_owners_on_apartment_id"
     t.index ["ownership_id"], name: "index_owners_on_ownership_id"
     t.index ["user_id"], name: "index_owners_on_user_id"
+  end
+
+  create_table "passes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "event_id", null: false
+    t.integer "valid_days", comment: "Pass validity days."
+    t.float "price", comment: "Price of the pass, possibly in dollars."
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_passes_on_event_id"
   end
 
   create_table "quinchos", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -213,6 +222,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_27_120946) do
   add_foreign_key "owners", "apartments"
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"
+  add_foreign_key "passes", "events"
   add_foreign_key "quinchos", "communities"
   add_foreign_key "sport_courts", "communities"
   add_foreign_key "tenants", "owners"
