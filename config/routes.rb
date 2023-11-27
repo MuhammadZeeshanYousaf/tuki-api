@@ -33,7 +33,12 @@ Rails.application.routes.draw do
 
       # Other routes
       get "info" => "user#info", as: :user_info
-      namespace :admin do
+
+      scope :admin, controller: :admins do
+        get :dashboard
+      end
+
+      scope :owner, controller: :owners do
         get :dashboard
       end
 

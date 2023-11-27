@@ -1,6 +1,7 @@
 class Api::V1::BaseController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :authenticate_super_admin!, if: -> { current_api_v1_user.role_super_admin? }
+  before_action :set_community, unless: -> { current_api_v1_user.role_super_admin? || current_api_v1_user.role_guard? }
 
 
   protected
@@ -23,7 +24,7 @@ class Api::V1::BaseController < ApplicationController
   def current_ability
     case current_api_v1_user&.role_key
     when :member.to_s
-      @current_ability = Api::V1::BaseAbility.new(current_api_v1_user)
+      @current_ability = Api::V1::MemberAbility.new(current_api_v1_user)
     when :admin.to_s
       @current_ability = Api::V1::AdminAbility.new(current_api_v1_user)
     when :guard.to_s
@@ -32,9 +33,16 @@ class Api::V1::BaseController < ApplicationController
       @current_ability = Api::V1::SuperAdminAbility.new(current_api_v1_user)
     when :guest.to_s
       @current_ability = Api::V1::GuardAbility.new(current_api_v1_user)
+    when :owner.to_s
+      @current_ability = Api::V1::OwnerAbility.new(current_api_v1_user)
     else
       @current_ability = ApplicationAbility.new(current_api_v1_user)
     end
+  end
+
+  def set_community
+    @community = current_api_v1_user.community
+    raise 'Community does not exist!' if @community.blank?
   end
 
 

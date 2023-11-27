@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::BaseAbility < ApplicationAbility
+class Api::V1::MemberAbility < ApplicationAbility
 
   def initialize(user)
     # define common abilities here

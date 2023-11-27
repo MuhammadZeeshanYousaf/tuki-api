@@ -1,5 +1,21 @@
 class Api::V1::OwnersController < Api::V1::BaseController
-  before_action :set_owner, only: %i[ show update destroy ]
+  before_action :set_owner, only: %i[ dashboard show update destroy ]
+
+  def dashboard
+    authorize! :manage, :dashboard
+
+    co_owners_count = @owner.co_owners.count
+    tenants_count = @owner.tenants.count
+    bookings_count = @owner.bookings.count
+    community_events = SerializableResource.new(@community.events, each_serializer: Api::V1::EventSerializer).serializable_hash[:events]
+
+    render json: {
+      co_owners: co_owners_count,
+      tenants: tenants_count,
+      bookings: bookings_count,
+      events: community_events
+    }
+  end
 
   # GET /owners
   def index
@@ -41,7 +57,11 @@ class Api::V1::OwnersController < Api::V1::BaseController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_owner
-      @owner = Owner.find_by!(id: params[:id], apartment_id: params[:apartment_id])
+      @owner = current_api_v1_user.owner
+    end
+
+    def set_apartment
+      @apartment = @owner.apartment
     end
 
     # Only allow a list of trusted parameters through.
