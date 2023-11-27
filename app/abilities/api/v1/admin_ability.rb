@@ -7,6 +7,7 @@ class Api::V1::AdminAbility < Api::V1::MemberAbility
 
     can :manage, :admin_dashboard
     can :create, Event
+    can :read, Event
 
   end
 

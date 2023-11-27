@@ -3,9 +3,10 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # GET /events
   def index
-    @events = Event.all
+    authorize! :read, Event
+    @events = @community.events
 
-    render json: @events
+    render json: @events, each_serializer: Api::V1::EventSerializer
   end
 
   # GET /events/1
