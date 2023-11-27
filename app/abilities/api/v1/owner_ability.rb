@@ -6,8 +6,9 @@ class Api::V1::OwnerAbility < Api::V1::MemberAbility
     def initialize(user)
       super
       owner = user.owner
-      return render(json: { error: 'Owner does not exist!' }, status: :forbidden) if owner.blank?
-      apartment = user.owner.apartment rescue return render(json: { error: 'Apartment does not exist!' }, status: :forbidden)
+      raise('Owner doest not exist!') if owner.blank?
+      apartment = owner.apartment
+      raise('Apartment does not exist!') if apartment.blank?
 
       can :manage, :dashboard
       can :read, Apartment, user: { owner: { apartment: apartment } }
