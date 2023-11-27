@@ -18,31 +18,35 @@ class Api::V1::EventsController < Api::V1::BaseController
   # POST /events
   def create
     authorize! :create, Event
-    @event = @community.events.new(event_params)
+    ActiveRecord::Base.transaction do
+      @event = @community.events.new(event_params)
 
-    if @event.save
-      Ticket.create!(ticket_params.merge(event: @event))
+      if @event.save
+        Ticket.create!(ticket_params.merge(event: @event))
 
-      render json: @event, serializer: Api::V1::EventSerializer,
-             status: :created, location: api_v1_event_path(@event)
-    else
-      render json: { error: full_error(@event) }, status: :unprocessable_entity
+        render json: @event, serializer: Api::V1::EventSerializer,
+               status: :created, location: api_v1_event_path(@event)
+      else
+        render json: { error: full_error(@event) }, status: :unprocessable_entity
+      end
     end
   end
 
   # PATCH/PUT /events/1
   def update
     authorize! :update, @event
-    if @event.update(event_params)
-      if ticket_params.present? && @event.ticket.present? && @event.ticket.update(ticket_params)
-        render json: @event, serializer: Api::V1::EventSerializer
-      elsif @event.ticket&.errors&.any?
-        render json: { error: full_error(@event.ticket) }, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      if @event.update(event_params)
+        if ticket_params.present? && @event.ticket.present? && @event.ticket.update(ticket_params)
+          render json: @event, serializer: Api::V1::EventSerializer
+        elsif @event.ticket&.errors&.any?
+          render json: { error: full_error(@event.ticket) }, status: :unprocessable_entity
+        else
+          render json: @event, serializer: Api::V1::EventSerializer
+        end
       else
-        render json: @event, serializer: Api::V1::EventSerializer
+        render json: { error: full_error(@event) }, status: :unprocessable_entity
       end
-    else
-      render json: { error: full_error(@event) }, status: :unprocessable_entity
     end
   end
 

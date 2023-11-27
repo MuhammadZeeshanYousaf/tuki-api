@@ -37,12 +37,26 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
   # POST /owners
   def create
-    @owner = Owner.new(owner_params)
+    authorize! :create, Owner
+    ActiveRecord::Base.transaction do
+      if owner_params.has_key?(:apartment_id)
+        @apartment = Apartment.find(owner_params[:apartment_id])
+      else
+        @apartment = Apartment.find_or_initialize_by(apartment_params.merge(community: @community))
+        return render(json: { error: full_error(@apartment) }, status: :unprocessable_entity) unless @apartment.save
+      end
 
-    if @owner.save
-      render json: @owner, serializer: Api::V1::OwnerSerializer, status: :created, location: api_v1_owner_path(@owner)
-    else
-      render json: { error: full_error(@owner) }, status: :unprocessable_entity
+      owner_account = @community.users.new account_params.merge(role: Role.find_by_key(:owner), community: @community)
+      return render(json: { error: full_error(owner_account) }, status: :unprocessable_entity) unless owner_account.save
+
+      # if ownership_id provided then co_owner will be created
+      @owner = @apartment.owners.new(owner_params.merge(user: owner_account))
+
+      if @owner.save
+        render json: @owner, serializer: Api::V1::OwnerSerializer, status: :created, location: api_v1_owner_path(@owner)
+      else
+        render json: { error: full_error(@owner) }, status: :unprocessable_entity
+      end
     end
   end
 
@@ -72,6 +86,15 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def owner_params
-      params.require(:owner).permit(:user_id, :apartment_id, :ownership_id)
+      # if ownership_id provided then co_owner will be created
+      params.require(:owner).permit( :apartment_id, :ownership_id) || {}
+    end
+
+    def account_params
+      params.require(:owner).permit( :first_name, :last_name, :national_id, :contact, :birthdate, :email, :password)
+    end
+
+    def apartment_params
+      params.require(:apartment).permit( :number, :license_plate)
     end
 end

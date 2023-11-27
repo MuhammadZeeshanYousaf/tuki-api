@@ -55,7 +55,6 @@ Rails.application.routes.draw do
 
       resources :communities, shallow: true do
         resources :apartments do
-          resources :owners
           resources :tenants
         end
         resources :quinchos
@@ -63,6 +62,7 @@ Rails.application.routes.draw do
         resources :reservations
       end
 
+      resources :owners
       resources :guests
 
     end

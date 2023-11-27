@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_one :owner
   has_many :bookings
 
+  validates :email, :national_id, presence: true, uniqueness: true
+
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
 
 
