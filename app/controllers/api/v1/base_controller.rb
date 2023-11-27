@@ -42,7 +42,7 @@ class Api::V1::BaseController < ApplicationController
 
   def set_community
     @community = current_api_v1_user.community
-    raise 'Community does not exist!' if @community.blank?
+    render(json: { error: 'Community does not exist!' }, status: :forbidden) if @community.blank?
   end
 
 

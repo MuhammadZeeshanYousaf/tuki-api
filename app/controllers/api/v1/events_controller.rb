@@ -15,11 +15,11 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # POST /events
   def create
+    authorize! :create, Event
     @event = @community.events.new(event_params)
 
     if @event.save
       Ticket.create!(ticket_params.merge(event: @event))
-      @event.passes.create!(pass_params)
 
       render json: @event, serializer: Api::V1::EventSerializer,
              status: :created, location: api_v1_event_path(@event)
@@ -50,15 +50,11 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:name, :description, :seats, :start_date, :end_date, :start_time, :end_time)
+      params.require(:event).permit(:name, :description, :seats, :start_date, :end_date, :start_time, :end_time,
+                                    passes_attributes: [:price, :valid_days])
     end
 
     def ticket_params
       params.require(:ticket).permit(:price)
     end
-
-    def pass_params
-      params.require(:passes).permit! if params.require(:passes).is_a? Array
-    end
-
 end
