@@ -11,6 +11,7 @@ class Api::V1::AdminAbility < Api::V1::MemberAbility
     can :destroy, Event, community: user.community
     can :update, Event, community: user.community
     can :create, Owner
+    can :read, Owner
 
   end
 

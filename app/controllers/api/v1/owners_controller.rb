@@ -25,7 +25,8 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
   # GET /owners
   def index
-    @owners = Owner.where apartment_id: params[:apartment_id]
+    authorize! :read, Owner
+    @owners = @community.owners
 
     render json: @owners, each_serializer: Api::V1::OwnerSerializer
   end
