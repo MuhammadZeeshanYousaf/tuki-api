@@ -38,6 +38,8 @@ class ApplicationController < ActionController::API
         @current_ability = GuestAbility.new(current_api_v1_user)
       when :owner.to_s
         @current_ability = OwnerAbility.new(current_api_v1_user)
+      when :co_owner.to_s
+        @current_ability = CoOwnerAbility.new(current_api_v1_user)
       else
         @current_ability = ApplicationAbility.new(current_api_v1_user)
       end

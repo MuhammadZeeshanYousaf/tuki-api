@@ -6,7 +6,9 @@ class Role < ApplicationRecord
     super_admin: 3,
     guest: 4,
     owner: 5,
-    tenant: 6
+    tenant: 6,
+    co_owner: 7,
+    co_tenant: 8
   }
 
   has_many :assignments

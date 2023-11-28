@@ -1,5 +1,5 @@
 class CreateRoles < ActiveRecord::Migration[7.1]
-  def change
+  def up
     create_table :roles, id: :uuid do |t|
       t.string :name
       t.integer :key, default: 0
@@ -19,5 +19,11 @@ class CreateRoles < ActiveRecord::Migration[7.1]
       Role.create(name: r.first, key: r.second)
     end
 
+  end
+
+  def down
+    Role.destroy_by key: [:member, :guard, :admin, :super_admin, :guest]
+    remove_index :roles, :key, unique: true
+    drop_table :roles
   end
 end

@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       end
 
       resources :owners
+      resources :owners, path: :co_owners, as: :co_owners
       resources :guests
 
     end
