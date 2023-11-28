@@ -90,13 +90,14 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
   # DELETE /owners/1
   def destroy
+    authorize! :destroy, @owner
     @owner.destroy!
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_owner
-      @owner = current_api_v1_user.owner
+      @owner = User.find(params[:id])
     end
 
     def set_apartment

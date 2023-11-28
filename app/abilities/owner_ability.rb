@@ -13,6 +13,7 @@ class OwnerAbility < ApplicationAbility
       can :manage, :dashboard
       can :read, Apartment, user: { owner: { apartment: apartment } }
       can :manage, Owner, user: { owner: owner }
+      can :destroy, Owner
     end
 
 end

@@ -5,7 +5,9 @@ class CoOwnerAbility < OwnerAbility
 
   def initialize(user)
     super
+
     cannot :create, Owner
+    cannot :destroy, Owner
   end
 
 end

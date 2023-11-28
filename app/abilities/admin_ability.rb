@@ -12,6 +12,8 @@ class AdminAbility < ApplicationAbility
     can :update, Event, community: user.community
     can :create, Owner
     can :read, Owner
+    can :destroy, User, community: user.community, role: Role.find_by!(key: :co_owner)
+    can :destroy, User, community: user.community, role: Role.find_by!(key: :owner)
 
   end
 

@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_one :role, through: :assignment
   belongs_to :community
   has_one :owner, dependent: :destroy
+  alias_method :co_owner, :owner
   has_many :bookings
 
   validates :email, :national_id, presence: true, uniqueness: true
