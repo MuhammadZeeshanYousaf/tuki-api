@@ -1,3 +1,3 @@
-class Api::V1::RoleSerializer < ActiveModel::Serializer
+class RoleSerializer < ActiveModel::Serializer
   attributes :id, :name, :key
 end

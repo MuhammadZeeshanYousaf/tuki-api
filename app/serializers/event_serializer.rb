@@ -1,4 +1,4 @@
-class Api::V1::EventSerializer < ActiveModel::Serializer
+class EventSerializer < ActiveModel::Serializer
   attributes :id, :name, :description, :seats, :start_time, :end_time, :start_date, :end_date
   has_one :ticket
   has_many :passes
