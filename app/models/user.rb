@@ -4,10 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
-  has_one :assignment
+  has_one :assignment, dependent: :destroy
   has_one :role, through: :assignment
   belongs_to :community
-  has_one :owner
+  has_one :owner, dependent: :destroy
   has_many :bookings
 
   validates :email, :national_id, presence: true, uniqueness: true
