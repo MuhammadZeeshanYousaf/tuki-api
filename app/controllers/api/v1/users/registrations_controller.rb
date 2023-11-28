@@ -12,7 +12,7 @@ class Api::V1::Users::RegistrationsController < Devise::RegistrationsController
   def register_success
     render json: {
       message: 'Signed up successfully.',
-      user: Api::V1::UserSerializer.new(current_api_v1_user)
+      user: UserSerializer.new(current_api_v1_user)
     }, status: :ok
   end
 

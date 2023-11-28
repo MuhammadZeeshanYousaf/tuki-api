@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::GuardAbility < Api::V1::MemberAbility
+class GuestAbility < ApplicationAbility
 
   def initialize(user)
     super

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::SuperAdminAbility < Api::V1::MemberAbility
+class SuperAdminAbility < ApplicationAbility
 
   def initialize(user)
     super

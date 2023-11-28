@@ -23,4 +23,27 @@ class ApplicationController < ActionController::API
     obj&.errors&.full_messages&.to_sentence
   end
 
+  def current_ability
+    begin
+      case current_api_v1_user&.role_key
+      when :member.to_s
+        @current_ability = ApplicationAbility.new(current_api_v1_user)
+      when :admin.to_s
+        @current_ability = AdminAbility.new(current_api_v1_user)
+      when :guard.to_s
+        @current_ability = GuardAbility.new(current_api_v1_user)
+      when :super_admin.to_s
+        @current_ability = SuperAdminAbility.new(current_api_v1_user)
+      when :guest.to_s
+        @current_ability = GuestAbility.new(current_api_v1_user)
+      when :owner.to_s
+        @current_ability = OwnerAbility.new(current_api_v1_user)
+      else
+        @current_ability = ApplicationAbility.new(current_api_v1_user)
+      end
+    rescue => e
+      render json: { error: e.message }, status: :unauthorized
+    end
+  end
+
 end

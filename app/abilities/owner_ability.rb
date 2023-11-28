@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::OwnerAbility < Api::V1::MemberAbility
+class OwnerAbility < ApplicationAbility
   # frozen_string_literal: true
 
     def initialize(user)
