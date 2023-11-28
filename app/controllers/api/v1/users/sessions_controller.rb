@@ -4,7 +4,7 @@ class Api::V1::Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(_resource, _opts = {})
-    render json: current_api_v1_user, serializer: Api::V1::UserSerializer,
+    render json: current_api_v1_user, serializer: UserSerializer,
            meta: 'Logged in successfully.', meta_key: :message, status: :ok
   end
 

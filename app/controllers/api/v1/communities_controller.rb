@@ -6,12 +6,12 @@ class Api::V1::CommunitiesController < Api::V1::BaseController
   def index
     @communities = Community.all
 
-    render json: @communities, each_serializer: Api::V1::CommunitySerializer
+    render json: @communities, each_serializer: CommunitySerializer
   end
 
   # GET /communities/:id
   def show
-    render json: @community, serializer: Api::V1::CommunitySerializer
+    render json: @community, serializer: CommunitySerializer
   end
 
   # POST /communities
@@ -19,7 +19,7 @@ class Api::V1::CommunitiesController < Api::V1::BaseController
     @community = Community.new(community_params)
 
     if @community.save
-      render json: @community, serializer: Api::V1::CommunitySerializer,
+      render json: @community, serializer: CommunitySerializer,
              status: :created, location: api_v1_community_url(@community, only_path: true)
     else
       render json: { error: full_error(@community) }, status: :unprocessable_entity
@@ -29,7 +29,7 @@ class Api::V1::CommunitiesController < Api::V1::BaseController
   # PATCH/PUT /communities/:id
   def update
     if @community.update(community_params)
-      render json: @community, serializer: Api::V1::CommunitySerializer
+      render json: @community, serializer: CommunitySerializer
     else
       render json: { error: full_error(@community) }, status: :unprocessable_entity
     end

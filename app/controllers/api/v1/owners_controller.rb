@@ -8,7 +8,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
     co_owners_count = @owner.co_owners.count
     tenants_count = @owner.tenants.count
     bookings_count = @owner.bookings.count
-    community_events = ::ActiveModel::SerializableResource.new(@community.events, each_serializer: Api::V1::EventSerializer).serializable_hash[:events]
+    community_events = ::ActiveModel::SerializableResource.new(@community.events, each_serializer: EventSerializer).serializable_hash[:events]
 
     render json: {
       co_owners: co_owners_count,
@@ -20,7 +20,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
   # GET /owner/co_owners
   def co_owners
-    render json: @owner.co_owners, each_serializer: Api::V1::OwnerSerializer, root: 'co_owners'
+    render json: @owner.co_owners, each_serializer: OwnerSerializer, root: 'co_owners'
   end
 
   # GET /owners
@@ -28,12 +28,12 @@ class Api::V1::OwnersController < Api::V1::BaseController
     authorize! :read, Owner
     @owners = @community.owners
 
-    render json: @owners, each_serializer: Api::V1::OwnerSerializer
+    render json: @owners, each_serializer: OwnerSerializer
   end
 
   # GET /owners/1
   def show
-    render json: @owner, serializer: Api::V1::OwnerSerializer
+    render json: @owner, serializer: OwnerSerializer
   end
 
   # POST /owners
@@ -54,7 +54,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
       @owner = @apartment.owners.new(owner_params.merge(user: owner_account))
 
       if @owner.save
-        render json: @owner, serializer: Api::V1::OwnerSerializer, status: :created, location: api_v1_owner_path(@owner)
+        render json: @owner, serializer: OwnerSerializer, status: :created, location: api_v1_owner_path(@owner)
       else
         render json: { error: full_error(@owner) }, status: :unprocessable_entity
       end
@@ -64,7 +64,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
   # PATCH/PUT /owners/1
   def update
     if @owner.update(owner_params)
-      render json: @owner, serializer: Api::V1::OwnerSerializer
+      render json: @owner, serializer: OwnerSerializer
     else
       render json: { error: full_error(@owner) }, status: :unprocessable_entity
     end

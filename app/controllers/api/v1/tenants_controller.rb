@@ -5,12 +5,12 @@ class Api::V1::TenantsController < Api::V1::BaseController
   def index
     @tenants = Tenant.where apartment_id: params[:apartment_id]
 
-    render json: @tenants, each_serializer: Api::V1::TenantSerializer
+    render json: @tenants, each_serializer: TenantSerializer
   end
 
   # GET /tenants/1
   def show
-    render json: @tenant, serializer: Api::V1::TenantSerializer
+    render json: @tenant, serializer: TenantSerializer
   end
 
   # POST /tenants
@@ -18,7 +18,7 @@ class Api::V1::TenantsController < Api::V1::BaseController
     @tenant = Tenant.new(tenant_params)
 
     if @tenant.save
-      render json: @tenant, serializer: Api::V1::TenantSerializer, status: :created, location: api_v1_tenant_path(@tenant)
+      render json: @tenant, serializer: TenantSerializer, status: :created, location: api_v1_tenant_path(@tenant)
     else
       render json: { error: full_error(@tenant) }, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class Api::V1::TenantsController < Api::V1::BaseController
   # PATCH/PUT /tenants/1
   def update
     if @tenant.update(tenant_params)
-      render json: @tenant, serializer: Api::V1::TenantSerializer
+      render json: @tenant, serializer: TenantSerializer
     else
       render json: { error: full_error(@tenant) }, status: :unprocessable_entity
     end
