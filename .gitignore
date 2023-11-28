@@ -37,3 +37,8 @@
 # Ignore RubyMine files
 /.idea
 /.idea/*
+
+# Ignore VsCode files
+/.ruby-lsp
+/.ruby-lsp/*
+
