@@ -19,4 +19,12 @@ class User < ApplicationRecord
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
 
 
+  def name
+    "#{first_name} #{last_name}"
+  end
+
+  def send_add_user_email
+    UserMailer.with(user: self).add_user.deliver_later
+  end
+
 end
