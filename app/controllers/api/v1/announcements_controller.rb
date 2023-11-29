@@ -15,12 +15,15 @@ class Api::V1::AnnouncementsController < Api::V1::BaseController
 
   # POST /announcements
   def create
-    @announcement = Announcement.new(announcement_params)
+    puts current_api_v1_user.inspect
+    authorize! :create, Announcement
+    @announcement = current_api_v1_user.announcements.new(announcement_params.merge(group: params[:group]))
 
     if @announcement.save
-      render json: @announcement, status: :created, location: @announcement
+      render json: @announcement, serializer: AnnouncementSerializer,
+             status: :created, location: api_v1_announcement_path(@announcement)
     else
-      render json: @announcement.errors, status: :unprocessable_entity
+      render json: { error: full_error(@announcement) }, status: :unprocessable_entity
     end
   end
 
@@ -46,6 +49,6 @@ class Api::V1::AnnouncementsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def announcement_params
-      params.require(:announcement).permit(:content, :user_id, :type, :announced_to)
+      params.require(:announcement).permit(:topic, :content)
     end
 end

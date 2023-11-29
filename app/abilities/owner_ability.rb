@@ -10,10 +10,11 @@ class OwnerAbility < ApplicationAbility
       apartment = owner.apartment
       raise('Apartment does not exist!') if apartment.blank?
 
-      can :manage, :dashboard
+      can :manage, :owner_dashboard
       can :read, Apartment, user: { owner: { apartment: apartment } }
       can :manage, Owner, user: { owner: owner }
       can :destroy, Owner
+      can :read, :co_owners
     end
 
 end

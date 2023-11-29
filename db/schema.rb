@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_29_110625) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_29_180511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -18,10 +18,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_110625) do
   create_table "announcements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "content"
     t.uuid "user_id", null: false, comment: "The User of role Admin or Super Admin, or could be Owner who has access to."
-    t.string "type", comment: "Type of the announcement, it could be Owner, Member, Admin or Guest."
     t.uuid "announced_to", comment: "If a specific user is announced_to then reference of that user."
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "topic"
+    t.integer "group", default: 0, comment: "An enum, it could be warning or alert."
     t.index ["user_id"], name: "index_announcements_on_user_id"
   end
 

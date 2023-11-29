@@ -1,10 +1,11 @@
 class Api::V1::OwnersController < Api::V1::BaseController
-  before_action :set_owner, only: %i[ dashboard co_owners show update destroy eliminate ]
+  before_action :set_owner, only: %i[ show update destroy eliminate ]
 
   # GET /owner/dashboard
   def dashboard
-    authorize! :manage, :dashboard
+    authorize! :manage, :owner_dashboard
 
+    @owner = current_api_v1_user.owner
     co_owners_count = @owner.co_owners.count
     tenants_count = @owner.tenants.count
     bookings_count = @owner.bookings.count
@@ -20,7 +21,8 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
   # GET /owner/co_owners
   def co_owners
-    render json: @owner.co_owners, each_serializer: OwnerSerializer, root: 'co_owners'
+    authorize! :read, :co_owners
+    render json: current_api_v1_user.co_owners, each_serializer: OwnerSerializer, root: 'co_owners'
   end
 
   # GET /owners
