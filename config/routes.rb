@@ -62,8 +62,11 @@ Rails.application.routes.draw do
         resources :reservations
       end
 
-      resources :owners
-      resources :owners, path: :co_owners, as: :co_owners
+      concern :eliminated do
+        delete :eliminate, on: :member
+      end
+      resources :owners, concerns: :eliminated
+      resources :owners, path: :co_owners, as: :co_owners, concerns: :eliminated
       resources :guests
 
     end

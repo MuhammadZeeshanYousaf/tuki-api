@@ -1,5 +1,5 @@
 class Api::V1::OwnersController < Api::V1::BaseController
-  before_action :set_owner, only: %i[ dashboard co_owners show update destroy ]
+  before_action :set_owner, only: %i[ dashboard co_owners show update destroy eliminate ]
 
   # GET /owner/dashboard
   def dashboard
@@ -91,17 +91,41 @@ class Api::V1::OwnersController < Api::V1::BaseController
   # DELETE /owners/1
   def destroy
     authorize! :destroy, @owner
-    @owner.destroy!
+    ActiveRecord::Base.transaction do
+      if @owner.co_owners.present?
+        co_owner_account_ids = @owner.co_owners.pluck :user_id
+        User.destroy_by id: co_owner_account_ids
+      end
+      @owner.account.destroy!
+    end
+
+  end
+
+  # DELETE /owners/:id/eliminate
+  def eliminate
+    authorize! :eliminate, @owner
+    eliminated_account = EliminatedAccount.new eliminate_params.merge(eliminated: @owner)
+
+    if eliminated_account.save
+      head :no_content
+    else
+      head :unprocessable_entity
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_owner
-      @owner = User.find(params[:id])
+      @owner = Owner.find(params[:id])
     end
 
     def set_apartment
       @apartment = @owner.apartment
+    end
+
+    def eliminate_params
+      params.require(params[:co_owner].present? ? :co_owner : :owner)
+            .permit(:reason, :message)
     end
 
     # Only allow a list of trusted parameters through.
