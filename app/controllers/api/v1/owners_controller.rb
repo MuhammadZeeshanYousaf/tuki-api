@@ -79,6 +79,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
       @x_owner = @apartment.owners.new(x_owner_params.merge(user: account))
 
       if @x_owner.save
+        account.send_add_user_email
         render json: @x_owner, serializer: OwnerSerializer, root: role.co_owner? ? 'co_owner' : 'owner',
                status: :created, location: location_path(@x_owner)
       else
