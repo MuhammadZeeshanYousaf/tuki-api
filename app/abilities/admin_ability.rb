@@ -18,6 +18,7 @@ class AdminAbility < ApplicationAbility
       owner.account.community_id == community.id && (owner.account.role_co_owner? || owner.account.role_owner?)
     end
     can :eliminate, Owner, account: { community: community }
+    can :read, Owner, account: { community: community }
 
   end
 

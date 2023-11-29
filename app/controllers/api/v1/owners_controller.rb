@@ -38,7 +38,13 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
   # GET /owners/1
   def show
-    render json: @owner, serializer: OwnerSerializer
+    authorize! :read, @owner
+    if request.path.include?('co_owner')
+      return head(:not_found) if @owner.ownership_id.blank?
+      @root = 'co_owner'
+    end
+
+    render json: @owner, serializer: OwnerSerializer, root: @root
   end
 
   # POST /owners
