@@ -4,4 +4,6 @@ class Tenant < ApplicationRecord
 
   has_many :co_tenants, class_name: 'Tenant', foreign_key: 'tenantship_id'
   belongs_to :tenantship, class_name: 'Tenant', optional: true
+
+  has_one :eliminated_account, as: :eliminated
 end
