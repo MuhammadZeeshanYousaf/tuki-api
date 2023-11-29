@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :co_owners, through: :owner
   has_many :bookings
   has_many :announcements
+  has_many :my_announcements, class_name: 'Announcement', foreign_key: 'announced_to'
 
   validates :email, :national_id, presence: true, uniqueness: true
 

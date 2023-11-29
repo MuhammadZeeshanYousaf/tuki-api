@@ -15,7 +15,6 @@ class Api::V1::AnnouncementsController < Api::V1::BaseController
 
   # POST /announcements
   def create
-    puts current_api_v1_user.inspect
     authorize! :create, Announcement
     @announcement = current_api_v1_user.announcements.new(announcement_params.merge(group: params[:group]))
 
@@ -49,6 +48,6 @@ class Api::V1::AnnouncementsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def announcement_params
-      params.require(:announcement).permit(:topic, :content)
+      params.require(:announcement).permit(:topic, :content, :announced_to)
     end
 end
