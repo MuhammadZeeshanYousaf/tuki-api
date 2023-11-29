@@ -20,6 +20,7 @@ class AdminAbility < ApplicationAbility
     can :eliminate, Owner, account: { community: community }
     can :read, Owner, account: { community: community }
     can :create, Announcement
+    can :announced_to, Announcement, user: { community: community }
 
   end
 

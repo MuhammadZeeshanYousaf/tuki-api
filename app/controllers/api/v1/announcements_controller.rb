@@ -3,9 +3,11 @@ class Api::V1::AnnouncementsController < Api::V1::BaseController
 
   # GET /announcements
   def index
-    @announcements = Announcement.all
-
-    render json: @announcements
+    if current_api_v1_user.role_admin?
+      render json: current_api_v1_user.announcements
+    else
+      render json: current_api_v1_user.my_announcements
+    end
   end
 
   # GET /announcements/1
@@ -17,6 +19,7 @@ class Api::V1::AnnouncementsController < Api::V1::BaseController
   def create
     authorize! :create, Announcement
     @announcement = current_api_v1_user.announcements.new(announcement_params.merge(group: params[:group]))
+    authorize! :announced_to, @announcement
 
     if @announcement.save
       render json: @announcement, serializer: AnnouncementSerializer,
