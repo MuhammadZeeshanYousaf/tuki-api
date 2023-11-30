@@ -81,7 +81,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
   # DELETE /owners/:id/eliminate
   def eliminate
     authorize! :eliminate, @owner
-    eliminated_account = EliminatedAccount.new eliminate_params.merge(eliminated: @owner)
+    eliminated_account = EliminatedAccount.find_or_initialize_by eliminate_params.merge(eliminated: @owner)
 
     if eliminated_account.save
       head :no_content
