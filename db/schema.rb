@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_29_180511) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_30_160733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -91,17 +91,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_180511) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_guests_on_user_id"
-  end
-
-  create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false, comment: "The user who invited the guest."
-    t.uuid "guest_id", comment: "The guest profile if the invitation is accepted by guest."
-    t.string "email", comment: "The email on which the invitation is sent."
-    t.integer "status", default: 0, comment: "Guest invitation is pending / accepted / rejected"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["guest_id"], name: "index_invitations_on_guest_id"
-    t.index ["user_id"], name: "index_invitations_on_user_id"
   end
 
   create_table "jwt_denylists", force: :cascade do |t|
@@ -228,8 +217,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_29_180511) do
   add_foreign_key "bookings", "users", column: "booked_by_id"
   add_foreign_key "events", "communities"
   add_foreign_key "guests", "users"
-  add_foreign_key "invitations", "guests"
-  add_foreign_key "invitations", "users"
   add_foreign_key "owners", "apartments"
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"
