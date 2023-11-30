@@ -42,7 +42,6 @@ Rails.application.routes.draw do
         get :dashboard
       end
 
-      resources :invitations
       resources :announcements
       resources :events, shallow: true do
         resources :tickets do
