@@ -30,7 +30,6 @@ class Api::V1::CoOwnersController < Api::V1::BaseController
       @co_owner = @owner.co_owners.new(user: account, apartment_id: @owner.apartment_id)
 
       if @co_owner.save
-        account.send_add_user_email
         render json: @co_owner, serializer: OwnerSerializer, root: 'co_owner',
                status: :created, location: api_v1_co_owner_path(@co_owner)
       else

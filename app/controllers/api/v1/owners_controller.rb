@@ -56,7 +56,6 @@ class Api::V1::OwnersController < Api::V1::BaseController
 
       # Response
       if @owner.save
-        account.send_add_user_email
         render json: @owner, serializer: OwnerSerializer,
                status: :created, location: api_v1_owner_path(@owner)
       else

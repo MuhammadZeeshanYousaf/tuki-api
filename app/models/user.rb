@@ -15,16 +15,22 @@ class User < ApplicationRecord
   has_many :my_announcements, class_name: 'Announcement', foreign_key: 'announced_to'
 
   validates :email, :national_id, presence: true, uniqueness: true
-
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
+  after_create :send_add_user_email, if: :can_send_add_user_email?
 
 
   def name
     "#{first_name} #{last_name}"
   end
 
-  def send_add_user_email
-    UserMailer.with(user: self).add_user.deliver_later
-  end
+  private
+
+    def can_send_add_user_email?
+      %w(owner co_owner tenant co_tenant).include? self.role_key
+    end
+
+    def send_add_user_email
+      UserMailer.with(user: self).add_user.deliver_later
+    end
 
 end
