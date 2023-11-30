@@ -18,6 +18,7 @@ class OwnerAbility < ApplicationAbility
       can :manage, Tenant, owner: owner
       can :eliminate, Tenant, owner: owner
       can :manage, Guest, invited_by: user
+      can :manage, WorkingGuest, invited_by: user
     end
 
 end

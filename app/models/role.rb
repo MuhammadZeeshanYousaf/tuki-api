@@ -8,7 +8,8 @@ class Role < ApplicationRecord
     owner: 5,
     tenant: 6,
     co_owner: 7,
-    co_tenant: 8
+    co_tenant: 8,
+    working_guest: 9
   }
 
   has_many :assignments

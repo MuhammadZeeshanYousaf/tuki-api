@@ -12,8 +12,10 @@ class User < ApplicationRecord
   has_many :co_owners, through: :owner
   has_one :tenant, dependent: :destroy
   has_many :co_tenants, through: :tenant
-  has_one :guest, dependent: :destroy
-  has_many :guest_invitations, class_name: 'Guest', foreign_key: 'invited_by_id'
+  has_one :guest, -> { where(type: nil) }, dependent: :destroy
+  has_many :guest_invitations, -> { where(type: nil) }, class_name: 'Guest', foreign_key: 'invited_by_id'
+  has_one :working_guest, dependent: :destroy
+  has_many :working_guest_invitations, -> { where(type: WorkingGuest.to_s) }, class_name: 'Guest', foreign_key: 'invited_by_id'
   has_many :guest_approvals, class_name: 'Guest', foreign_key: 'approved_by_id'
   has_many :bookings
   has_many :announcements

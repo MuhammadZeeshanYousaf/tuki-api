@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       resources :co_owners, except: [:update, :destroy], concerns: :eliminated
       resources :tenants, except: :update, concerns: :eliminated
       resources :guests, except: :update
+      resources :working_guests, except: :update
 
     end
   end
