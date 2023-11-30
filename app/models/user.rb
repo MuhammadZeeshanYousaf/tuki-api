@@ -9,8 +9,12 @@ class User < ApplicationRecord
   belongs_to :community
   has_one :owner, dependent: :destroy
   alias_method :co_owner, :owner
-  has_many :tenants, dependent: :destroy
   has_many :co_owners, through: :owner
+  has_one :tenant, dependent: :destroy
+  has_many :co_tenants, through: :tenant
+  has_one :guest, dependent: :destroy
+  has_many :guest_invitations, class_name: 'Guest', foreign_key: 'invited_by_id'
+  has_many :guest_approvals, class_name: 'Guest', foreign_key: 'approved_by_id'
   has_many :bookings
   has_many :announcements
   has_many :my_announcements, class_name: 'Announcement', foreign_key: 'announced_to'

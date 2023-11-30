@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_30_160733) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_30_161844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -87,9 +87,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_30_160733) do
 
   create_table "guests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false, comment: "A temporary member account will be created for guest."
-    t.integer "type", default: 0, comment: "Guest can be a regular or working guest."
+    t.string "type", default: "0", comment: "Guest can be a regular or working guest."
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "invited_by_id", null: false
+    t.uuid "approved_by_id"
+    t.datetime "valid_from", comment: "The Guest is valid from this Date and Time."
+    t.datetime "valid_to", comment: "The Guest is valid till this Date and Time."
+    t.index ["approved_by_id"], name: "index_guests_on_approved_by_id"
+    t.index ["invited_by_id"], name: "index_guests_on_invited_by_id"
     t.index ["user_id"], name: "index_guests_on_user_id"
   end
 
@@ -217,6 +223,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_30_160733) do
   add_foreign_key "bookings", "users", column: "booked_by_id"
   add_foreign_key "events", "communities"
   add_foreign_key "guests", "users"
+  add_foreign_key "guests", "users", column: "approved_by_id"
+  add_foreign_key "guests", "users", column: "invited_by_id"
   add_foreign_key "owners", "apartments"
   add_foreign_key "owners", "owners", column: "ownership_id"
   add_foreign_key "owners", "users"

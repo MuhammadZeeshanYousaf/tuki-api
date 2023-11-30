@@ -1,0 +1,3 @@
+class WorkingGuest < Guest
+
+end
