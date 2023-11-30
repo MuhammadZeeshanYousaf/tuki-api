@@ -1,6 +1,12 @@
 class Api::V1::WorkingGuestsController < Api::V1::BaseController
   # before_action :set_working_guest, only: %i[ show update destroy ]
 
+  def index
+    authorize! :index, WorkingGuest
+
+    render json: current_api_v1_user.working_guest_invitations, each_serializer: GuestSerializer, root: 'working_guests'
+  end
+
   def create
     authorize! :create, WorkingGuest
 
