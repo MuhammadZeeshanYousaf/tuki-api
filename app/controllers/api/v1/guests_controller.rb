@@ -3,13 +3,15 @@ class Api::V1::GuestsController < Api::V1::BaseController
 
   # GET /guests
   def index
-    @guests = Guest.all
+    authorize! :index, Guest
 
-    render json: @guests, each_serializer: GuestSerializer
+    render json: current_api_v1_user.guest_invitations, each_serializer: GuestSerializer
   end
 
   # GET /guests/1
   def show
+    authorize! :show, @guest
+
     render json: @guest, serializer: GuestSerializer
   end
 
@@ -39,7 +41,9 @@ class Api::V1::GuestsController < Api::V1::BaseController
 
   # DELETE /guests/1
   def destroy
-    @guest.destroy!
+    authorize! :destroy, @guest
+
+    @guest.user.destroy!
   end
 
   private
