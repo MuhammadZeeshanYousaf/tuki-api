@@ -14,6 +14,7 @@ class OwnerAbility < ApplicationAbility
       can :read, Apartment, user: { owner: { apartment: apartment } }
       can :manage, Owner, account: { owner: owner }
       can :manage, :co_owners
+      can :show, Owner, ownership: owner
       can :eliminate, Owner, ownership: owner
     end
 
