@@ -40,7 +40,6 @@ Rails.application.routes.draw do
 
       scope :owner, controller: :owners do
         get :dashboard
-        get :co_owners
       end
 
       resources :invitations
@@ -66,7 +65,8 @@ Rails.application.routes.draw do
         delete :eliminate, on: :member
       end
       resources :owners, concerns: :eliminated
-      resources :owners, path: :co_owners, as: :co_owners, concerns: :eliminated
+      # resources :owners, path: :co_owners, as: :co_owners, concerns: :eliminated
+      resources :co_owners, concerns: :eliminated
       resources :guests
 
     end
