@@ -87,7 +87,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_30_161844) do
 
   create_table "guests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false, comment: "A temporary member account will be created for guest."
-    t.string "type", default: "0", comment: "Guest can be a regular or working guest."
+    t.string "type", comment: "Guest can be a regular or working guest."
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "invited_by_id", null: false

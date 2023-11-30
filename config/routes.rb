@@ -64,8 +64,8 @@ Rails.application.routes.draw do
       resources :owners, except: :update, concerns: :eliminated
       # resources :owners, path: :co_owners, as: :co_owners, concerns: :eliminated
       resources :co_owners, except: [:update, :destroy], concerns: :eliminated
-      resources :guests
       resources :tenants, except: :update, concerns: :eliminated
+      resources :guests, except: :update
 
     end
   end

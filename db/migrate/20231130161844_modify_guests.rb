@@ -1,6 +1,6 @@
 class ModifyGuests < ActiveRecord::Migration[7.1]
   def up
-    change_column :guests, :type, :string, comment: "Guest can be a regular or working guest."
+    change_column :guests, :type, :string, default: nil, comment: "Guest can be a regular or working guest."
     add_reference :guests, :invited_by, type: :uuid, foreign_key: { to_table: :users }, null: false
     add_reference :guests, :approved_by, type: :uuid, foreign_key: { to_table: :users }, null: true
     add_column :guests, :valid_from, :datetime, comment: 'The Guest is valid from this Date and Time.'

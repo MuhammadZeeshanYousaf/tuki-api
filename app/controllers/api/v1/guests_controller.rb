@@ -15,13 +15,17 @@ class Api::V1::GuestsController < Api::V1::BaseController
 
   # POST /guests
   def create
-    @guest = Guest.new(guest_params)
+    authorize! :create, Guest
 
-    if @guest.save
-      render json: @guest, serializer: GuestSerializer, status: :created#, location: @guest
-    else
-      render json: { error: full_error(@guest) }, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      account = @community.users.create! account_params.merge(role: Role.find_by_key(:guest))
+      @guest = current_api_v1_user.guest_invitations.create! guest_params.merge(user: account)
     end
+
+    render json: @guest, serializer: GuestSerializer, status: :created, location: api_v1_guest_path(@guest)
+  rescue ActiveRecord::RecordInvalid => e
+      # If an exception occurs, the transaction will be rolled back, and no changes will be saved
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   # PATCH/PUT /guests/1
@@ -44,8 +48,12 @@ class Api::V1::GuestsController < Api::V1::BaseController
       @guest = Guest.find(params[:id])
     end
 
+    def account_params
+      params.require(:guest).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password)
+    end
+
     # Only allow a list of trusted parameters through.
     def guest_params
-      params.require(:guest).permit(:user_id, :type)
+      params.require(:guest).permit :valid_from, :valid_to
     end
 end

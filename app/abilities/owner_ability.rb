@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OwnerAbility < ApplicationAbility
-  # frozen_string_literal: true
 
     def initialize(user)
       super
@@ -18,6 +17,7 @@ class OwnerAbility < ApplicationAbility
       can :eliminate, Owner, ownership: owner
       can :manage, Tenant, owner: owner
       can :eliminate, Tenant, owner: owner
+      can :manage, Guest, invited_by: user
     end
 
 end
