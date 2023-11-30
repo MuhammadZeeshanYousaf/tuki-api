@@ -16,6 +16,8 @@ class OwnerAbility < ApplicationAbility
       can :manage, :co_owners
       can :show, Owner, ownership: owner
       can :eliminate, Owner, ownership: owner
+      can :manage, Tenant, owner: owner
+      can :eliminate, Tenant, owner: owner
     end
 
 end

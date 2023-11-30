@@ -40,6 +40,8 @@ class ApplicationController < ActionController::API
         @current_ability = OwnerAbility.new(current_api_v1_user)
       when :co_owner.to_s
         @current_ability = CoOwnerAbility.new(current_api_v1_user)
+      when :tenant.to_s
+        @current_ability = TenantAbility.new(current_api_v1_user)
       else
         @current_ability = ApplicationAbility.new(current_api_v1_user)
       end

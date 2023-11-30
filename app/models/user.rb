@@ -9,6 +9,7 @@ class User < ApplicationRecord
   belongs_to :community
   has_one :owner, dependent: :destroy
   alias_method :co_owner, :owner
+  has_many :tenants, dependent: :destroy
   has_many :co_owners, through: :owner
   has_many :bookings
   has_many :announcements

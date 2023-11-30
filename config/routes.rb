@@ -53,9 +53,7 @@ Rails.application.routes.draw do
       end
 
       resources :communities, shallow: true do
-        resources :apartments do
-          resources :tenants
-        end
+        resources :apartments
         resources :quinchos
         resources :sport_courts
         resources :reservations
@@ -64,10 +62,11 @@ Rails.application.routes.draw do
       concern :eliminated do
         delete :eliminate, on: :member
       end
-      resources :owners, concerns: :eliminated
+      resources :owners, except: :update, concerns: :eliminated
       # resources :owners, path: :co_owners, as: :co_owners, concerns: :eliminated
-      resources :co_owners, concerns: :eliminated
+      resources :co_owners, except: [:update, :destroy], concerns: :eliminated
       resources :guests
+      resources :tenants, except: :update, concerns: :eliminated
 
     end
   end
