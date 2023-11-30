@@ -1,10 +1,16 @@
 class Api::V1::WorkingGuestsController < Api::V1::BaseController
-  # before_action :set_working_guest, only: %i[ show update destroy ]
+  before_action :set_working_guest, only: %i[ show destroy ]
 
   def index
     authorize! :index, WorkingGuest
 
     render json: current_api_v1_user.working_guest_invitations, each_serializer: GuestSerializer, root: 'working_guests'
+  end
+
+  def show
+    authorize! :show, @working_guest
+
+    render json: @working_guest, serializer: GuestSerializer, root: WorkingGuest.to_s.underscore
   end
 
   def create
@@ -21,11 +27,17 @@ class Api::V1::WorkingGuestsController < Api::V1::BaseController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
+  def destroy
+    authorize! :destroy, @working_guest
+
+    @working_guest.user.destroy!
+  end
+
 
   private
 
     def set_working_guest
-      WorkingGuest.find(params[:id])
+      @working_guest = WorkingGuest.find(params[:id])
     end
 
     def working_guest_params
