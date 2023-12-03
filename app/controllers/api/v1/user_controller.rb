@@ -16,6 +16,27 @@ class Api::V1::UserController < Api::V1::BaseController
     end
   end
 
+  def password
+    authorize! :update, @user
+
+    if @user.valid_password? password_params[:current_password]
+      if password_params[:password] == password_params[:password_confirmation]
+        return render(json: { message: 'Password is used before, choose a new password!' }, status: :forbidden) if password_params[:password] == password_params[:current_password]
+
+        if @user.update password: password_params[:password]
+          render json: { message: 'Password updated successfully' }
+        else
+          render json: { error: full_error(@user) }, status: :unprocessable_entity
+        end
+      else
+        render json: { message: 'Password confirmation is invalid!' }, status: :forbidden
+      end
+    else
+      render json: { message: 'Invalid current password!' }, status: :forbidden
+    end
+  end
+
+
   private
 
   def set_user
@@ -24,6 +45,10 @@ class Api::V1::UserController < Api::V1::BaseController
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :contact, :birthdate, :national_id)
+  end
+
+  def password_params
+    params.require(:user).permit(:current_password, :password, :password_confirmation)
   end
 
 end

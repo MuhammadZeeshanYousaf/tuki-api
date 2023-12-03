@@ -28,7 +28,9 @@ Rails.application.routes.draw do
 
       # Other routes
       # get "info" => "user#info", as: :user_info
-      resource :user, only: [:show, :update], controller: :user
+      resource :user, only: [:show, :update], controller: :user do
+        put :password
+      end
 
       scope :admin, controller: :admins do
         get :dashboard
