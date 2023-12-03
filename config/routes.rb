@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  namespace :api do
-    namespace :v1 do
-      get 'user/show'
-    end
-  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -32,7 +27,8 @@ Rails.application.routes.draw do
       get 'members', to: 'members#show'
 
       # Other routes
-      get "info" => "user#info", as: :user_info
+      # get "info" => "user#info", as: :user_info
+      resource :user, only: [:show, :update], controller: :user
 
       scope :admin, controller: :admins do
         get :dashboard
@@ -67,6 +63,7 @@ Rails.application.routes.draw do
       resources :tenants, except: :update, concerns: :eliminated
       resources :guests, except: :update
       resources :working_guests, except: :update
+
 
     end
   end

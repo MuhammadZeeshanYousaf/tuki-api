@@ -9,5 +9,6 @@ class ApplicationAbility
 
     can :read, :user
     cannot :manage, :admin
+    can :manage, User, id: user.id
   end
 end
