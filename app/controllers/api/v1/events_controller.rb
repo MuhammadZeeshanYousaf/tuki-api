@@ -9,6 +9,14 @@ class Api::V1::EventsController < Api::V1::BaseController
     render json: @events, each_serializer: EventSerializer
   end
 
+  # GET /events/upcoming
+  def upcoming
+    authorize! :upcoming, Event
+    @events = @community.events.upcoming_by_date
+
+    render json: @events, each_serializer: EventSerializer
+  end
+
   # GET /events/1
   def show
     authorize! :read, Event

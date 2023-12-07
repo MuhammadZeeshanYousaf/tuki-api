@@ -46,6 +46,9 @@ Rails.application.routes.draw do
 
       resources :announcements
       resources :events, shallow: true do
+        collection do
+          get :upcoming
+        end
         resources :tickets do
           resources :bookings do
             resources :validations
