@@ -17,6 +17,8 @@ class ApplicationController < ActionController::API
     # devise_parameter_sanitizer.for(:account_update) do |u|
     #   u.permit({ roles: [] }, :email, :password, :password_confirmation, :avatar,:current_password, :about,:user, :name)
     # end
+    update_attrs = [:password, :password_confirmation, :current_password]
+    devise_parameter_sanitizer.permit :account_update, keys: update_attrs
   end
 
   def full_error(obj)

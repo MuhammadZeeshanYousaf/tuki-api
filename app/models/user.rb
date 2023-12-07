@@ -17,7 +17,7 @@ class User < ApplicationRecord
   has_one :working_guest, dependent: :destroy
   has_many :working_guest_invitations, -> { where(type: WorkingGuest.to_s) }, class_name: 'Guest', foreign_key: 'invited_by_id'
   has_many :guest_approvals, class_name: 'Guest', foreign_key: 'approved_by_id'
-  has_many :bookings
+  has_many :bookings, foreign_key: 'booked_by_id'
   has_many :announcements
   has_many :my_announcements, class_name: 'Announcement', foreign_key: 'announced_to'
 

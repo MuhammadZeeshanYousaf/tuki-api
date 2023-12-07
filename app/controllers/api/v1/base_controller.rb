@@ -1,7 +1,7 @@
 class Api::V1::BaseController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :authenticate_super_admin!, if: -> { current_api_v1_user.role_super_admin? }
-  before_action :set_community, unless: -> { current_api_v1_user.role_super_admin? || current_api_v1_user.role_guard? }
+  before_action :set_community, unless: -> { current_api_v1_user.role_super_admin? }
 
 
   protected
