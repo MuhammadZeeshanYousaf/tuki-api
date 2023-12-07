@@ -40,6 +40,10 @@ Rails.application.routes.draw do
         get :dashboard
       end
 
+      scope :guard, controller: :guards do
+        get :dashboard
+      end
+
       resources :announcements
       resources :events, shallow: true do
         resources :tickets do

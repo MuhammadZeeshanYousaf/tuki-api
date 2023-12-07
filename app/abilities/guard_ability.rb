@@ -7,6 +7,7 @@ class GuardAbility < ApplicationAbility
     guard_community = user.community
 
     can :read, Event, community: guard_community
+    can :manage, :guard_dashboard
 
   end
 
