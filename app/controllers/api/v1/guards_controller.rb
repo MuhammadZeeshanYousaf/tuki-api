@@ -14,12 +14,24 @@ class Api::V1::GuardsController < Api::V1::BaseController
     }
   end
 
+  # GET /guards
   def index
     authorize! :index, User
-
     guards = Role.guard.first&.users&.where(community: @community)
 
     render json: guards, each_serializer: UserSerializer, root: :guards
+  end
+
+  # GET /guards/:id
+  def show
+    authorize! :show, User
+    guard = Role.guard.first&.users&.find_by(id: params[:id], community: @community)
+
+    if guard
+      render json: guard, serializer: UserSerializer, root: :guard
+    else
+      render json: { error: "Guard not found!" }, status: :not_found
+    end
   end
 
 end
