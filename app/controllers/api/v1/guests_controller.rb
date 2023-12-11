@@ -30,15 +30,6 @@ class Api::V1::GuestsController < Api::V1::BaseController
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  # PATCH/PUT /guests/1
-  def update
-    if @guest.update(guest_params)
-      render json: @guest, serializer: GuestSerializer
-    else
-      render json: { error: full_error(@guest) }, status: :unprocessable_entity
-    end
-  end
-
   # DELETE /guests/1
   def destroy
     authorize! :destroy, @guest
