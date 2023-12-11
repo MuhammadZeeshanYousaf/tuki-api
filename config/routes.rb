@@ -43,7 +43,7 @@ Rails.application.routes.draw do
       scope :guard, controller: :guards do
         get :dashboard
       end
-      resources :guards, only: [ :index, :show ]
+      resources :guards, only: [ :index, :show, :create ]
 
       resources :announcements
       resources :events, shallow: true do

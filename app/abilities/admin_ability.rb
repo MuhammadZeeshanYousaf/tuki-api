@@ -22,7 +22,7 @@ class AdminAbility < ApplicationAbility
     can :read, :co_owners
     can :create, Announcement
     can :announced_to, Announcement, user: { community: admin_community }
-    can :read, User, community: admin_community
+    can :manage, :guards
 
   end
 
