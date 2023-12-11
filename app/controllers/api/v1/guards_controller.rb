@@ -14,4 +14,12 @@ class Api::V1::GuardsController < Api::V1::BaseController
     }
   end
 
+  def index
+    authorize! :index, User
+
+    guards = Role.guard.first&.users&.where(community: @community)
+
+    render json: guards, each_serializer: UserSerializer, root: :guards
+  end
+
 end
