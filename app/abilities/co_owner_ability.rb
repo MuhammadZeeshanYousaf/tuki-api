@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CoOwnerAbility < OwnerAbility
+class CoOwnerAbility < ApplicationAbility
   # frozen_string_literal: true
 
   def initialize(user)
@@ -8,6 +8,7 @@ class CoOwnerAbility < OwnerAbility
 
     cannot :create, Owner
     cannot :destroy, Owner
+    can :manage, :co_owner_dashboard
   end
 
 end

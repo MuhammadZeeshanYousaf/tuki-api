@@ -70,6 +70,9 @@ Rails.application.routes.draw do
       resources :owners, except: :update, concerns: :eliminated
       # resources :owners, path: :co_owners, as: :co_owners, concerns: :eliminated
       resources :co_owners, except: [:update, :destroy], concerns: :eliminated
+      scope :co_owner, controller: :co_owners do
+        get :dashboard
+      end
       resources :tenants, except: :update, concerns: :eliminated
       resources :guests, except: :update
       resources :working_guests, except: :update

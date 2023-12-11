@@ -1,6 +1,21 @@
 class Api::V1::CoOwnersController < Api::V1::BaseController
-  before_action :set_owner
+  before_action :set_owner, except: [ :dashboard ]
   before_action :set_co_owner, only: [ :show, :eliminate ]
+
+
+  # GET /co_owner/dashboard
+  def dashboard
+    authorize! :manage, :co_owner_dashboard
+
+    @co_owner = current_api_v1_user.co_owner
+    bookings_count = @co_owner.bookings.count
+    community_events = ::ActiveModel::SerializableResource.new(@community.events, each_serializer: EventSerializer).serializable_hash[:events]
+
+    render json: {
+      bookings: bookings_count,
+      events: community_events
+    }
+  end
 
   def index
     authorize! :index, :co_owners

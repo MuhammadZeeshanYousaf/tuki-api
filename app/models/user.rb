@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_one :role, through: :assignment
   belongs_to :community
   has_one :owner, dependent: :destroy
-  alias_method :co_owner, :owner
+  has_one :co_owner, -> { where.not(ownership: nil) }, class_name: 'Owner', dependent: :destroy
   has_many :co_owners, through: :owner
   has_one :tenant, dependent: :destroy
   has_many :co_tenants, through: :tenant
