@@ -38,7 +38,7 @@ class User < ApplicationRecord
     end
 
     def send_add_user_email
-      UserMailer.with(user: self).add_user.deliver_later
+      UserMailer.with(user: self, password: self.password).add_user.deliver_later
     end
 
 end
