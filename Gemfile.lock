@@ -89,6 +89,7 @@ GEM
     cancancan (3.5.0)
     case_transform (0.2)
       activesupport
+    chunky_png (1.4.0)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -228,6 +229,10 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rqrcode (2.2.0)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 1.0)
+    rqrcode_core (1.2.0)
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
     rspec-expectations (3.12.3)
@@ -280,6 +285,7 @@ DEPENDENCIES
   puma (>= 5.0)
   rack-cors (~> 2.0)
   rails (~> 7.1.2)
+  rqrcode (~> 2.0)
   rspec-rails (~> 6.0)
   tzinfo-data
 
