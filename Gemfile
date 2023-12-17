@@ -57,3 +57,5 @@ gem "active_model_serializers", "~> 0.10.14"
 gem "cancancan", "~> 3.5"
 gem "mailjet", "~> 1.7"
 gem "rqrcode", "~> 2.0"
+gem "aws-sdk-s3", require: false
+
