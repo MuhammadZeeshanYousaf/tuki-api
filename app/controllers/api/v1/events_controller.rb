@@ -39,18 +39,11 @@ class Api::V1::EventsController < Api::V1::BaseController
   # PATCH/PUT /events/1
   def update
     authorize! :update, @event
-    ActiveRecord::Base.transaction do
-      if @event.update(event_params)
-        if ticket_params.present? && @event.ticket.present? && @event.ticket.update(ticket_params)
-          render json: @event, serializer: EventSerializer
-        elsif @event.ticket&.errors&.any?
-          render json: { error: full_error(@event.ticket) }, status: :unprocessable_entity
-        else
-          render json: @event, serializer: EventSerializer
-        end
-      else
-        render json: { error: full_error(@event) }, status: :unprocessable_entity
-      end
+
+    if @event.update(event_params.except(:event_type))
+      render json: @event, serializer: EventSerializer
+    else
+      render json: { error: full_error(@event) }, status: :unprocessable_entity
     end
   end
 
@@ -69,10 +62,6 @@ class Api::V1::EventsController < Api::V1::BaseController
     # Only allow a list of trusted parameters through.
     def event_params
       params.require(:event).permit(:event_type, :name, :description, :seats, :start_date, :end_date, :charges,
-                                    time_slots_attributes: [:day, :start_time, :end_time])
-    end
-
-    def ticket_params
-      params.require(:ticket).permit(:price)
+                                    time_slots_attributes: [:id, :day, :start_time, :end_time])
     end
 end
