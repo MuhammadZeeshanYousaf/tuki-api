@@ -1,5 +1,5 @@
 class EventSerializer < ActiveModel::Serializer
-  attributes :id, :event_type, :name, :description, :seats, :start_date, :end_date
+  attributes :id, :event_type, :name, :description, :seats, :start_date, :end_date, :banner
   has_many :time_slots
 
   def start_date
@@ -8,6 +8,10 @@ class EventSerializer < ActiveModel::Serializer
 
   def end_date
     object.end_date.strftime('%Y-%m-%d') if object.end_date
+  end
+
+  def banner
+    object.banner.url
   end
 
 end

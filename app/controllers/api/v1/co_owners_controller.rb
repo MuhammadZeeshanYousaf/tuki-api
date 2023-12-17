@@ -81,7 +81,7 @@ class Api::V1::CoOwnersController < Api::V1::BaseController
     end
 
     def account_params
-      params.require(:co_owner).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password)
+      params.require(:co_owner).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password, :avatar)
     end
 
     def eliminate_params

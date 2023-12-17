@@ -45,7 +45,7 @@ class Api::V1::WorkingGuestsController < Api::V1::BaseController
     end
 
     def account_params
-      params.require(:working_guest).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password)
+      params.require(:working_guest).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password, :avatar)
     end
 
 end

@@ -10,7 +10,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
     co_owners_count = @owner.co_owners.count
     tenants_count = @owner.tenants.count
     bookings_count = @owner.bookings.count
-    community_events = ::ActiveModel::SerializableResource.new(@community.events, each_serializer: EventSerializer).serializable_hash[:events]
+    community_events = ::ActiveModel::SerializableResource.new(@community.events.upcoming_by_date, each_serializer: EventSerializer).serializable_hash[:events]
 
     render json: {
       co_owners: co_owners_count,
@@ -96,7 +96,7 @@ class Api::V1::OwnersController < Api::V1::BaseController
     end
 
     def account_params
-      params.require(:owner).permit(:first_name, :last_name, :email, :national_id, :contact, :birthdate)
+      params.require(:owner).permit(:first_name, :last_name, :email, :national_id, :contact, :birthdate, :avatar)
     end
 
     def eliminate_params

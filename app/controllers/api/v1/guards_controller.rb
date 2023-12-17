@@ -65,7 +65,7 @@ class Api::V1::GuardsController < Api::V1::BaseController
   private
 
   def account_params
-    params.require(:guard).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password)
+    params.require(:guard).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password, :avatar)
   end
 
   def apartment_params
