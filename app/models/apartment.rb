@@ -4,5 +4,5 @@ class Apartment < ApplicationRecord
   has_many :co_owners, through: :owners
   has_many :tenants
 
-  validates :license_plate, :number, presence: true, uniqueness: true
+  validates :number, presence: true, uniqueness: true
 end
