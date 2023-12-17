@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_17_090112) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_17_165918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -111,6 +111,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_17_090112) do
     t.date "end_date", comment: "Date on the event start and end."
     t.integer "event_type", default: 0
     t.float "charges", default: 0.0
+    t.uuid "allocated_guard_id", comment: "Event can have an allocated guard."
+    t.index ["allocated_guard_id"], name: "index_events_on_allocated_guard_id"
     t.index ["community_id"], name: "index_events_on_community_id"
   end
 

@@ -61,7 +61,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:event_type, :name, :description, :seats, :start_date, :end_date, :charges, :banner,
+      params.require(:event).permit(:event_type, :name, :description, :seats, :start_date, :end_date, :charges, :allocated_guard_id, :banner,
                                     time_slots_attributes: [:id, :day, :start_time, :end_time])
     end
 end

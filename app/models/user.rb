@@ -22,6 +22,7 @@ class User < ApplicationRecord
   has_many :announcements
   has_many :my_announcements, class_name: 'Announcement', foreign_key: 'announced_to'
   has_many :validations, foreign_key: 'validated_by_id'
+  has_one :allocation, class_name: 'Event', foreign_key: 'allocated_guard_id'
 
   validates :email, :national_id, presence: true, uniqueness: true
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
