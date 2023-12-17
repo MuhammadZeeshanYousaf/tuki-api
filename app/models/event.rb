@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  has_one_attached :banner
+
   belongs_to :community
   has_many :time_slots, dependent: :destroy
   accepts_nested_attributes_for :time_slots
