@@ -24,6 +24,7 @@ class AdminAbility < ApplicationAbility
     can :create, Announcement
     can :announced_to, Announcement, user: { community: admin_community }
     can :manage, :guards
+    can :manage, Apartment, community: admin_community
 
   end
 

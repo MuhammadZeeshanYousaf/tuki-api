@@ -45,7 +45,7 @@ Rails.application.routes.draw do
       end
       resources :guards, only: [ :index, :show, :create ]
       resources :validations
-
+      resources :apartments
       resources :announcements
       resources :events, shallow: true do
         collection do
@@ -57,7 +57,6 @@ Rails.application.routes.draw do
       end
 
       resources :communities, shallow: true do
-        resources :apartments
         resources :quinchos
         resources :sport_courts
         resources :reservations

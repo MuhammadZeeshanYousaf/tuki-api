@@ -3,7 +3,8 @@ class Api::V1::ApartmentsController < Api::V1::BaseController
 
   # GET /apartments
   def index
-    @apartments = Apartment.where(community_id: params[:community_id])
+    authorize! :index, Apartment
+    @apartments = @community.apartments
 
     render json: @apartments, each_serializer: ApartmentSerializer
   end
