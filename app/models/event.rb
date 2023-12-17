@@ -1,6 +1,6 @@
 class Event < ApplicationRecord
   belongs_to :community
-  has_many :time_slots
+  has_many :time_slots, dependent: :destroy
   accepts_nested_attributes_for :time_slots
   enum :event_type, { other: 0, sports: 1, barbq: 2, party: 3 }
 

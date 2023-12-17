@@ -1,6 +1,6 @@
 class TimeSlot < ApplicationRecord
   belongs_to :event
-  has_many :bookings, as: :bookable
+  has_many :bookings, as: :bookable, dependent: :destroy
 
   enum day: {
     monday: 0,
