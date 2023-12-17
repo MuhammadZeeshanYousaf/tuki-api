@@ -1,16 +1,6 @@
 class EventSerializer < ActiveModel::Serializer
-  attributes :id, :name, :description, :seats, :start_time, :end_time, :start_date, :end_date
-  has_one :ticket
-  has_many :passes
-
-
-  def start_time
-    object.start_time.strftime('%H:%M:%S') if object.start_time
-  end
-
-  def end_time
-    object.end_time.strftime('%H:%M:%S') if object.end_time
-  end
+  attributes :id, :event_type, :name, :description, :seats, :start_date, :end_date
+  has_many :time_slots
 
   def start_date
     object.start_date.strftime('%Y-%m-%d') if object.start_date

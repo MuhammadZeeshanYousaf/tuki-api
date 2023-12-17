@@ -26,17 +26,13 @@ class Api::V1::EventsController < Api::V1::BaseController
   # POST /events
   def create
     authorize! :create, Event
-    ActiveRecord::Base.transaction do
-      @event = @community.events.new(event_params)
+    @event = @community.events.new(event_params)
 
-      if @event.save
-        Ticket.create!(ticket_params.merge(event: @event))
-
-        render json: @event, serializer: EventSerializer,
-               status: :created, location: api_v1_event_path(@event)
-      else
-        render json: { error: full_error(@event) }, status: :unprocessable_entity
-      end
+    if @event.save
+      render json: @event, serializer: EventSerializer,
+             status: :created, location: api_v1_event_path(@event)
+    else
+      render json: { error: full_error(@event) }, status: :unprocessable_entity
     end
   end
 
@@ -72,8 +68,8 @@ class Api::V1::EventsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:name, :description, :seats, :start_date, :end_date, :start_time, :end_time,
-                                    passes_attributes: [:price, :valid_days])
+      params.require(:event).permit(:event_type, :name, :description, :seats, :start_date, :end_date, :charges,
+                                    time_slots_attributes: [:day, :start_time, :end_time])
     end
 
     def ticket_params

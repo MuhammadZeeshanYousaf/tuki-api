@@ -2,9 +2,9 @@ class Event < ApplicationRecord
   belongs_to :community
   has_many :time_slots
   accepts_nested_attributes_for :time_slots
-  enum :event_type, { other: 0, sports: 1, bar_bq: 2, party: 3 }
+  enum :event_type, { other: 0, sports: 1, barbq: 2, party: 3 }
 
-  validates :name, :start_date, :end_date, :start_time, :end_time, :seats, presence: true
+  validates :event_type, :name, :start_date, :end_date, :seats, presence: true
 
   # comparing with current Time zone set in application.rb
   # scope :upcoming_by_time, -> {
