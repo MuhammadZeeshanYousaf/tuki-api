@@ -3,9 +3,10 @@ class Api::V1::ValidationsController < Api::V1::BaseController
 
   # GET /validations
   def index
-    @validations = Validation.all
+    authorize! :index, Validation
+    @guard_validations = current_api_v1_user.validations
 
-    render json: @validations
+    render json: @guard_validations, each_serializer: ValidationSerializer
   end
 
   # GET /validations/1

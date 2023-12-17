@@ -44,6 +44,7 @@ Rails.application.routes.draw do
         get :dashboard
       end
       resources :guards, only: [ :index, :show, :create ]
+      resources :validations
 
       resources :announcements
       resources :events, shallow: true do
@@ -51,9 +52,7 @@ Rails.application.routes.draw do
           get :upcoming
         end
         resources :tickets do
-          resources :bookings do
-            resources :validations
-          end
+          resources :bookings
         end
       end
 

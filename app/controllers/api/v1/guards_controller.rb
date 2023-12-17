@@ -3,14 +3,14 @@ class Api::V1::GuardsController < Api::V1::BaseController
   def dashboard
     authorize! :manage, :guard_dashboard
 
-    events_count = @community.events.upcoming_by_date.count
-    guard_validations = current_api_v1_user.validations
-    guard_validations_count = guard_validations.count
+    upcoming_events = @community.events.upcoming_by_date
+    events_count = upcoming_events.count
+    guard_validations_count = current_api_v1_user.validations.count
 
     render json: {
       events_count: events_count,
       validations_count: guard_validations_count,
-      validations: guard_validations
+      events: upcoming_events
     }
   end
 
@@ -59,6 +59,14 @@ class Api::V1::GuardsController < Api::V1::BaseController
         render json: { error: full_error(account) }, status: :unprocessable_entity
       end
     end
+  end
+
+  # GET /guard/validations
+  def validations
+    authorize! :read, Validation
+    guard_validations = current_api_v1_user.validations
+
+    render json: guard_validations, each_serializer: ValidationSerializer
   end
 
 
