@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_17_065239) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_17_071724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -77,12 +77,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_17_065239) do
     t.string "name"
     t.text "description"
     t.integer "seats", comment: "Available seats"
-    t.datetime "start_time", comment: "When to start"
-    t.datetime "end_time", comment: "When to end"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "start_date", comment: "Date on the event start and end."
     t.date "end_date", comment: "Date on the event start and end."
+    t.integer "event_type", default: 0
+    t.float "charges", default: 0.0
     t.index ["community_id"], name: "index_events_on_community_id"
   end
 
@@ -186,6 +186,16 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_17_065239) do
     t.index ["event_id"], name: "index_tickets_on_event_id"
   end
 
+  create_table "time_slots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "event_id", null: false
+    t.integer "day", default: 0
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_time_slots_on_event_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -236,6 +246,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_17_065239) do
   add_foreign_key "tenants", "tenants", column: "tenantship_id"
   add_foreign_key "tenants", "users"
   add_foreign_key "tickets", "events"
+  add_foreign_key "time_slots", "events"
   add_foreign_key "validations", "bookings"
   add_foreign_key "validations", "users", column: "validated_by_id"
 end

@@ -1,30 +1,29 @@
 class Event < ApplicationRecord
   belongs_to :community
-  has_one :ticket
-  has_many :passes
-  accepts_nested_attributes_for :passes
-  # cannot accept nested attributes for ticket, only works for has_many association
+  has_many :time_slots
+  accepts_nested_attributes_for :time_slots
+  enum :event_type, { other: 0, sports: 1, bar_bq: 2, party: 3 }
 
   validates :name, :start_date, :end_date, :start_time, :end_time, :seats, presence: true
 
   # comparing with current Time zone set in application.rb
-  scope :upcoming_by_time, -> {
-    current_time = Time.current.strftime('%H:%M:%S').split(':').map(&:to_i)
-    where("EXTRACT(HOUR FROM end_time) >= ? AND EXTRACT(MINUTE FROM end_time) >= ? AND EXTRACT(SECOND FROM end_time) >= ?", *current_time)
-  }
+  # scope :upcoming_by_time, -> {
+  #   current_time = Time.current.strftime('%H:%M:%S').split(':').map(&:to_i)
+  #   where("EXTRACT(HOUR FROM end_time) >= ? AND EXTRACT(MINUTE FROM end_time) >= ? AND EXTRACT(SECOND FROM end_time) >= ?", *current_time)
+  # }
   scope :upcoming_by_date, -> {
     where("DATE(start_date) <= :current_date AND DATE(end_date) >= :current_date", { current_date: Date.current })
   }
 
   # @Todo - scope not working
-  scope :upcoming, -> {
-    current_time = Time.current.strftime('%H:%M:%S').split(':').map(&:to_i)
-    where(
-      "DATE(start_date) <= :current_date AND DATE(end_date) >= :current_date AND " \
-        "EXTRACT(HOUR FROM end_time) >= :hour AND EXTRACT(MINUTE FROM end_time) >= :minute AND EXTRACT(SECOND FROM end_time) >= :second",
-      { current_date: Date.current, hour: current_time[0], minute: current_time[1], second: current_time[2] }
-    )
-  }
+  # scope :upcoming, -> {
+  #   current_time = Time.current.strftime('%H:%M:%S').split(':').map(&:to_i)
+  #   where(
+  #     "DATE(start_date) <= :current_date AND DATE(end_date) >= :current_date AND " \
+  #       "EXTRACT(HOUR FROM end_time) >= :hour AND EXTRACT(MINUTE FROM end_time) >= :minute AND EXTRACT(SECOND FROM end_time) >= :second",
+  #     { current_date: Date.current, hour: current_time[0], minute: current_time[1], second: current_time[2] }
+  #   )
+  # }
 
 
 end
