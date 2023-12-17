@@ -24,6 +24,8 @@ class User < ApplicationRecord
 
   validates :email, :national_id, presence: true, uniqueness: true
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
+  # Random password is generated before saving a new user
+  before_create :generate_random_password
   after_create :send_add_user_email, if: :can_send_add_user_email?
 
 
@@ -32,6 +34,13 @@ class User < ApplicationRecord
   end
 
   private
+
+    # Add this method to generate and assign a random password
+    def generate_random_password
+      random_password = SecureRandom.hex(4)[0, 8] # Generates a random 8-character hexadecimal string
+      self.password = random_password
+      self.password_confirmation = random_password
+    end
 
     def can_send_add_user_email?
       %w(owner co_owner tenant co_tenant).include? self.role_key
