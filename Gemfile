@@ -59,4 +59,4 @@ gem "mailjet", "~> 1.7"
 gem "rqrcode", "~> 2.0"
 gem "aws-sdk-s3", require: false
 # gem "image_processing", ">= 1.2"
-
+gem 'transbank-sdk', '~> 3.0', '>= 3.0.2'
