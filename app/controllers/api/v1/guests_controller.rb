@@ -44,7 +44,7 @@ class Api::V1::GuestsController < Api::V1::BaseController
     end
 
     def account_params
-      params.require(:guest).permit(:first_name, :last_name, :national_id, :contact, :birthdate, :email, :password, :avatar)
+      params.require(:guest).permit(:first_name, :last_name, :nationality, :national_id, :contact, :birthdate, :email, :password, :avatar)
     end
 
     # Only allow a list of trusted parameters through.

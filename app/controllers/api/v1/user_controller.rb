@@ -44,7 +44,7 @@ class Api::V1::UserController < Api::V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :contact, :birthdate, :national_id)
+    params.require(:user).permit(:first_name, :last_name, :contact, :birthdate)
   end
 
   def password_params

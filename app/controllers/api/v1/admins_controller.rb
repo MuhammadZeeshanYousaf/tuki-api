@@ -1,5 +1,5 @@
 class Api::V1::AdminsController < Api::V1::BaseController
-  before_action :set_admin_user, :set_community
+  before_action :set_admin_user
 
   def dashboard
     authorize! :manage, :admin_dashboard
@@ -21,10 +21,6 @@ class Api::V1::AdminsController < Api::V1::BaseController
 
   def set_admin_user
     @admin = current_api_v1_user
-  end
-
-  def set_community
-    @community = @admin.community
   end
 
 end
