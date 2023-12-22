@@ -47,6 +47,9 @@ Rails.application.routes.draw do
       resources :validations
       resources :apartments
       resources :announcements
+      resource :webpay, controller: :webpay do
+        get :pay
+      end
       resources :events, shallow: true do
         collection do
           get :upcoming
