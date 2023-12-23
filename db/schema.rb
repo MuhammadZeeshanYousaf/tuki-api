@@ -81,16 +81,15 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_23_082202) do
   end
 
   create_table "bookings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "bookable_type", null: false
-    t.uuid "bookable_id", null: false
     t.uuid "booker_id", null: false, comment: "Custom column name which references to users table."
     t.float "amount_paid", comment: "How much the amount deducted from user account for the booking."
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "total_attendees", comment: "Total attendees of the event including booker."
     t.integer "payment_status", default: 0, comment: "Enum of payment status."
-    t.index ["bookable_type", "bookable_id"], name: "index_bookings_on_bookable"
+    t.uuid "time_slot_id", null: false
     t.index ["booker_id"], name: "index_bookings_on_booker_id"
+    t.index ["time_slot_id"], name: "index_bookings_on_time_slot_id"
   end
 
   create_table "communities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -275,6 +274,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_23_082202) do
   add_foreign_key "assignments", "users"
   add_foreign_key "attendees", "bookings"
   add_foreign_key "attendees", "users"
+  add_foreign_key "bookings", "time_slots"
   add_foreign_key "bookings", "users", column: "booker_id"
   add_foreign_key "events", "communities"
   add_foreign_key "guests", "users"

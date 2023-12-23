@@ -3,24 +3,46 @@ class Api::V1::BookingsController < Api::V1::BaseController
 
   # GET /bookings
   def index
-    @bookings = Booking.all
+    authorize! :index, Booking
+    @bookings = current_api_v1_user.bookings
 
     render json: @bookings
   end
 
+  # /bookings/time_slot/:time_slot_id
+  def time_slot
+    authorize! :time_slot, Booking
+    # after showing available slots
+    # show details of the bookable time_slot with charges
+  end
+
+  # /bookings/:id/checkout
+  def checkout
+    # save all attendees
+    @booking = current_api_v1_user.bookings.find(params[:id])
+    authorize! :checkout, @booking
+
+    if @booking.update(checkout_params)
+      render json: @booking
+    else
+      render json: @booking.errors, status: :unprocessable_entity
+    end
+  end
+
   # GET /bookings/1
   def show
+    authorize! :show, @booking
     render json: @booking
   end
 
   # POST /bookings
   def create
-    @booking = Booking.new(booking_params)
+    @booking = current_api_v1_user.bookings.new(booking_params)
 
     if @booking.save
-      render json: @booking, status: :created, location: @booking
+      render json: @booking, status: :created
     else
-      render json: @booking.errors, status: :unprocessable_entity
+      render json: { error: full_error(@booking) }, status: :unprocessable_entity
     end
   end
 
@@ -46,6 +68,10 @@ class Api::V1::BookingsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def booking_params
-      params.require(:booking).permit(:bookable_id, :bookable_type, :booked_by_id, :amount_paid)
+      params.require(:booking).permit(:total_attendees, :time_slot_id)
+    end
+
+    def checkout_params
+      params.require(:booking).permit(attendees_attributes: [:user_id])
     end
 end

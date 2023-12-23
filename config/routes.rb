@@ -54,15 +54,17 @@ Rails.application.routes.draw do
         collection do
           get :upcoming
         end
-        resources :tickets do
-          resources :bookings
-        end
+        get :available_slots, on: :member
+      end
+      resources :bookings do
+        get 'time_slot/:time_slot_id', action: :time_slot, on: :collection
+        match :checkout, on: :member, via: [:post, :put]
       end
 
       resources :communities, shallow: true do
-        resources :quinchos
-        resources :sport_courts
-        resources :reservations
+        # resources :quinchos
+        # resources :sport_courts
+        # resources :reservations
       end
 
       concern :eliminated do
