@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_22_093328) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_23_082202) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -73,15 +73,24 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_22_093328) do
     t.index ["user_id"], name: "index_assignments_on_user_id"
   end
 
+  create_table "attendees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "booking_id", null: false
+    t.uuid "user_id", null: false
+    t.index ["booking_id"], name: "index_attendees_on_booking_id"
+    t.index ["user_id"], name: "index_attendees_on_user_id"
+  end
+
   create_table "bookings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "bookable_type", null: false
     t.uuid "bookable_id", null: false
-    t.uuid "booked_by_id", null: false, comment: "Custom column name which references to users table."
+    t.uuid "booker_id", null: false, comment: "Custom column name which references to users table."
     t.float "amount_paid", comment: "How much the amount deducted from user account for the booking."
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "total_attendees", comment: "Total attendees of the event including booker."
+    t.integer "payment_status", default: 0, comment: "Enum of payment status."
     t.index ["bookable_type", "bookable_id"], name: "index_bookings_on_bookable"
-    t.index ["booked_by_id"], name: "index_bookings_on_booked_by_id"
+    t.index ["booker_id"], name: "index_bookings_on_booker_id"
   end
 
   create_table "communities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -264,7 +273,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_22_093328) do
   add_foreign_key "apartments", "communities"
   add_foreign_key "assignments", "roles"
   add_foreign_key "assignments", "users"
-  add_foreign_key "bookings", "users", column: "booked_by_id"
+  add_foreign_key "attendees", "bookings"
+  add_foreign_key "attendees", "users"
+  add_foreign_key "bookings", "users", column: "booker_id"
   add_foreign_key "events", "communities"
   add_foreign_key "guests", "users"
   add_foreign_key "guests", "users", column: "approved_by_id"
