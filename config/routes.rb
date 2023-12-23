@@ -47,9 +47,6 @@ Rails.application.routes.draw do
       resources :validations
       resources :apartments
       resources :announcements
-      resource :webpay, controller: :webpay do
-        get :pay
-      end
       resources :events, shallow: true do
         collection do
           get :upcoming
@@ -59,6 +56,9 @@ Rails.application.routes.draw do
       resources :bookings do
         get 'time_slot/:time_slot_id', action: :time_slot, on: :collection
         match :checkout, on: :member, via: [:post, :put]
+        resource :webpay, controller: :webpay, only: [:show, :create] do
+          get :pay
+        end
       end
 
       resources :communities, shallow: true do
