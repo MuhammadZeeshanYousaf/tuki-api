@@ -9,19 +9,20 @@ class Api::V1::BookingsController < Api::V1::BaseController
     render json: @bookings
   end
 
-  # /bookings/time_slot/:time_slot_id
+  # @todo - remove it later
+  # GET /bookings/time_slot/:time_slot_id
   def time_slot
     authorize! :time_slot, Booking
     # after showing available slots
     # show details of the bookable time_slot with charges
   end
 
-  # /bookings/:id/checkout
+  # POST|PUT /bookings/:id/checkout
   def checkout
-    # save all attendees
+    authorize! :checkout, Booking
     @booking = current_api_v1_user.bookings.find(params[:id])
-    authorize! :checkout, @booking
 
+    # save all attendees
     if @booking.update(checkout_params)
       render json: @booking
     else

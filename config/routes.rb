@@ -48,17 +48,15 @@ Rails.application.routes.draw do
       resources :apartments
       resources :announcements
       resources :events, shallow: true do
-        collection do
-          get :upcoming
-        end
-        get :available_slots, on: :member
+        get :upcoming, on: :collection
       end
       resources :bookings do
         get 'time_slot/:time_slot_id', action: :time_slot, on: :collection
         match :checkout, on: :member, via: [:post, :put]
-        resource :webpay, controller: :webpay, only: [:show, :create] do
-          get :pay
-        end
+        get :pay, controller: :webpay
+      end
+      namespace :webpay do
+        match :redirect, via: [:get]
       end
 
       resources :communities, shallow: true do

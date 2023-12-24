@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_23_082202) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_24_085447) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -234,6 +234,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_23_082202) do
     t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "available_seats"
     t.index ["event_id"], name: "index_time_slots_on_event_id"
   end
 

@@ -17,11 +17,6 @@ class Api::V1::EventsController < Api::V1::BaseController
     render json: @events, each_serializer: EventSerializer
   end
 
-  # GET /events/:id/available_slots
-  def available_slots
-    # return event with available slots
-  end
-
   # GET /events/1
   def show
     authorize! :read, Event
