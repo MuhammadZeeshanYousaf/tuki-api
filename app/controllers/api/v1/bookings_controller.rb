@@ -1,5 +1,5 @@
 class Api::V1::BookingsController < Api::V1::BaseController
-  before_action :set_booking, only: %i[ show update destroy ]
+  before_action :set_booking, only: %i[ show ]
 
   # GET /bookings
   def index
@@ -22,11 +22,18 @@ class Api::V1::BookingsController < Api::V1::BaseController
     authorize! :checkout, Booking
     @booking = current_api_v1_user.bookings.find(params[:id])
 
-    # save all attendees
-    if @booking.update(checkout_params)
-      render json: @booking
-    else
-      render json: @booking.errors, status: :unprocessable_entity
+    case checkout_params[:attendees_attributes].length <=> @booking.total_attendees.to_i
+    when 0
+      if @booking.update(checkout_params) # save all attendees
+        render json: @booking
+      else
+        render json: { error: @booking.errors.full_messages }, status: :unprocessable_entity
+      end
+    when 1
+      render json: { error: "Attendees are greater than #{@booking.total_attendees.to_i}" }, status: :not_acceptable
+    when -1
+      render json: { error: "Attendees are lesser than #{@booking.total_attendees.to_i}" }, status: :not_acceptable
+    else head :not_implemented
     end
   end
 
@@ -47,19 +54,6 @@ class Api::V1::BookingsController < Api::V1::BaseController
     end
   end
 
-  # PATCH/PUT /bookings/1
-  def update
-    if @booking.update(booking_params)
-      render json: @booking
-    else
-      render json: @booking.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /bookings/1
-  def destroy
-    @booking.destroy!
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -73,6 +67,6 @@ class Api::V1::BookingsController < Api::V1::BaseController
     end
 
     def checkout_params
-      params.require(:booking).permit(attendees_attributes: [:user_id])
+      params.require(:booking).permit(attendees_attributes: [:account_id])
     end
 end

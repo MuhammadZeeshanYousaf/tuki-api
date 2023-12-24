@@ -1,5 +1,5 @@
 class Api::V1::GuestsController < Api::V1::BaseController
-  before_action :set_guest, only: %i[ show update destroy ]
+  before_action :set_guest, only: %i[ show destroy ]
 
   # GET /guests
   def index

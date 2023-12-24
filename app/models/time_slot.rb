@@ -16,6 +16,8 @@ class TimeSlot < ApplicationRecord
   validates :end_time, presence: true, uniqueness: { scope: [ :event_id, :day ] }
   validate :start_and_end_time_uniqueness
 
+  default_scope { order(created_at: :desc) }
+
   before_create :set_available_seats
 
   private

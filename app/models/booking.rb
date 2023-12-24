@@ -6,6 +6,7 @@ class Booking < ApplicationRecord
   has_many :attendees, dependent: :destroy
   accepts_nested_attributes_for :attendees
   enum :payment_status, { unpaid: 0, in_process: 1, paid: 2, canceled: 3 }
+  default_scope { order(created_at: :desc) }
   after_update :in_process!, if: :transaction_id_changed?
 
   def update_transaction(resp)

@@ -50,7 +50,7 @@ Rails.application.routes.draw do
       resources :events, shallow: true do
         get :upcoming, on: :collection
       end
-      resources :bookings do
+      resources :bookings, except: [:update, :destroy] do
         get 'time_slot/:time_slot_id', action: :time_slot, on: :collection
         match :checkout, on: :member, via: [:post, :put]
         get :pay, controller: :webpay
