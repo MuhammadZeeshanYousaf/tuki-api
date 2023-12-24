@@ -87,9 +87,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_23_082202) do
     t.datetime "updated_at", null: false
     t.integer "total_attendees", comment: "Total attendees of the event including booker."
     t.integer "payment_status", default: 0, comment: "Enum of payment status."
+    t.string "transaction_id", comment: "Transaction id from webpay."
+    t.string "order_id", comment: "Order id from webpay."
     t.uuid "time_slot_id", null: false
     t.index ["booker_id"], name: "index_bookings_on_booker_id"
     t.index ["time_slot_id"], name: "index_bookings_on_time_slot_id"
+    t.index ["transaction_id"], name: "index_bookings_on_transaction_id", unique: true
   end
 
   create_table "communities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
