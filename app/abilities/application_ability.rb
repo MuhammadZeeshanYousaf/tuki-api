@@ -6,9 +6,11 @@ class ApplicationAbility
 
   def initialize(user)
     # Define abilities for the common/regular user here.
+    @community = user.community
 
     can :read, :user
     cannot :manage, :admin
     can :manage, User, id: user.id
+    can :read, Event, community: @community
   end
 end

@@ -4,9 +4,8 @@ class GuardAbility < ApplicationAbility
 
   def initialize(user)
     super
-    guard_community = user.community
 
-    can :upcoming, Event, community: guard_community
+    can :upcoming, Event, community: @community
     can :read, Event
     can :manage, :guard_dashboard
     can :manage, Validation

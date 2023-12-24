@@ -3,7 +3,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # GET /events
   def index
-    authorize! :read, Event
+    authorize! :index, Event
     @events = @community.events
 
     render json: @events, each_serializer: EventSerializer
@@ -19,7 +19,7 @@ class Api::V1::EventsController < Api::V1::BaseController
 
   # GET /events/1
   def show
-    authorize! :read, Event
+    authorize! :show, @event
     render json: @event, serializer: EventSerializer
   end
 
