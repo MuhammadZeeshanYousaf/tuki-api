@@ -1,10 +1,8 @@
-class Api::V1::WebpayController < Api::V1::BaseController
-  skip_after_action :authenticate_api_v1_user!, :authenticate_super_admin!, :set_community, only: [:show, :create]
-  before_action :verify_authenticity_token, only: [:show, :create]
-  before_action :set_booking, only: :pay
+class Api::V1::WebpayController < ApplicationController
+  before_action :authenticate_api_v1_user!, :set_booking, only: :pay
 
   def pay
-    if @booking.unpaid?
+    if @booking.unpaid? || @booking.in_process?
       if ENV['WEBPAY_ENV'].eql?'production'
         # set production credentials
       else
@@ -31,15 +29,19 @@ class Api::V1::WebpayController < Api::V1::BaseController
         render json: { error: 'Booking Invalid!' }, status: :unprocessable_entity
       end
     else
-      render json: { error: 'Invalid Request!' }, status: :unprocessable_entity
+      render json: { error: 'Invalid Booking Request!' }, status: :unprocessable_entity
     end
   end
 
   def redirect
     # possible query params: token_ws=, TBK_ORDEN_COMPRA=081e04129cdddab5, TBK_ID_SESION=session_id321
     if params[:token_ws].present?
-      @tx = Transbank::Webpay::WebpayPlus::Transaction.new(::Transbank::Common::IntegrationCommerceCodes::WEBPAY_PLUS)
-      @resp = @tx.commit("#{params[:token_ws]}")
+      begin
+        @tx = Transbank::Webpay::WebpayPlus::Transaction.new(::Transbank::Common::IntegrationCommerceCodes::WEBPAY_PLUS)
+        @resp = @tx.commit("#{params[:token_ws]}")
+      rescue => e
+        return render(json: e.message, status: :forbidden)
+      end
 
       @booking = Booking.find_by!(transaction_id: @resp['buy_order'])
       # {"vci"=>"TSY", "amount"=>20, "status"=>"AUTHORIZED", "buy_order"=>"7a3e13a820c14a6c", "session_id"=>"session_id321",
@@ -54,7 +56,7 @@ class Api::V1::WebpayController < Api::V1::BaseController
         render json: 'Unauthorized transaction!', status: :unauthorized
       end
     else
-      render json: 'Invalid transaction!', status: :not_acceptable
+      render json: 'Invalid transaction!', status: :forbidden
     end
   end
 
