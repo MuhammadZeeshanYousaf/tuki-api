@@ -1,5 +1,6 @@
 class Api::V1::BookingsController < Api::V1::BaseController
-  before_action :set_booking, only: %i[ show ]
+  skip_before_action :authenticate_api_v1_user!, :authenticate_super_admin!, :set_community, only: :attendee_qr, if: -> { request.get? }
+  before_action :set_booking, only: %i[ show attendee_qr ]
 
   # GET /bookings
   def index
@@ -51,6 +52,18 @@ class Api::V1::BookingsController < Api::V1::BaseController
       render json: @booking, status: :created
     else
       render json: { error: full_error(@booking) }, status: :unprocessable_entity
+    end
+  end
+
+  # GET|POST /bookings/:id/attendee_qr/:attendee_id
+  def attendee_qr
+    if request.post?
+      authorize! :attendee_qr, :validate
+      render json: @booking
+    elsif request.get?
+      @booking
+      # @Todo - SHOW Booking basic details with html rendering
+      render plain: '<Booking QR Details Hidden>'
     end
   end
 

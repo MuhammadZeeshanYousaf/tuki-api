@@ -9,6 +9,7 @@ class GuardAbility < ApplicationAbility
     can :read, Event
     can :manage, :guard_dashboard
     can :manage, Validation
+    can :attendee_qr, :validate
 
   end
 

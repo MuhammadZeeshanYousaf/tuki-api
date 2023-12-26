@@ -60,3 +60,4 @@ gem "rqrcode", "~> 2.0"
 gem "aws-sdk-s3", require: false
 # gem "image_processing", ">= 1.2"
 gem 'transbank-sdk', '~> 3.0', '>= 3.0.2'
+gem 'delayed_job_active_record', '~> 4.1', '>= 4.1.1'
