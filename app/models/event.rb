@@ -4,6 +4,7 @@ class Event < ApplicationRecord
   belongs_to :community
   has_many :time_slots, dependent: :destroy
   has_many :bookings, through: :time_slots
+  has_many :attendees, through: :bookings
   belongs_to :allocated_guard, class_name: 'User', optional: true # event can have an allocated guard
   accepts_nested_attributes_for :time_slots
   enum :event_type, { other: 0, sports: 1, barbq: 2, party: 3 }
