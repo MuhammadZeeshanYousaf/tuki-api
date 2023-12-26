@@ -17,7 +17,7 @@ class Event < ApplicationRecord
   #   where("EXTRACT(HOUR FROM end_time) >= ? AND EXTRACT(MINUTE FROM end_time) >= ? AND EXTRACT(SECOND FROM end_time) >= ?", *current_time)
   # }
   scope :upcoming_by_date, -> {
-    where("DATE(start_date) <= :current_date AND DATE(end_date) >= :current_date", { current_date: Date.current })
+    where("DATE(start_date) >= :current_date AND DATE(end_date) >= :current_date", { current_date: Date.current })
   }
 
   # @Todo - scope not working
