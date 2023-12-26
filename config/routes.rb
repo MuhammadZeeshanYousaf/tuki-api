@@ -54,11 +54,11 @@ Rails.application.routes.draw do
         get 'time_slot/:time_slot_id', action: :time_slot, on: :collection
         match :checkout, on: :member, via: [:post, :put]
         get :pay, controller: :webpay
-        get 'attendee_qr/:attendee_id', action: :attendee_qr, on: :member, as: :attendee_qr
       end
       namespace :webpay do
         match :redirect, via: [:get]
       end
+      match 'attendee_qr/:id', to: 'attendees#attendee_qr', via: [:get, :post], as: :attendee_qr
 
       resources :communities, shallow: true do
         # resources :quinchos
