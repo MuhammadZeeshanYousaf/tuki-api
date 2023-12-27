@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_26_073739) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_27_162018) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -151,6 +151,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_26_073739) do
     t.uuid "approved_by_id"
     t.datetime "valid_from", comment: "The Guest is valid from this Date and Time."
     t.datetime "valid_to", comment: "The Guest is valid till this Date and Time."
+    t.string "purpose"
     t.index ["approved_by_id"], name: "index_guests_on_approved_by_id"
     t.index ["invited_by_id"], name: "index_guests_on_invited_by_id"
     t.index ["user_id"], name: "index_guests_on_user_id"

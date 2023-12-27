@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :first_name, :last_name, :contact, :birthdate, :national_id, :avatar
+  attributes :id, :email, :first_name, :last_name, :nationality, :national_id, :contact, :birthdate, :avatar
   has_one :role, serializer: RoleSerializer
 
   def birthdate

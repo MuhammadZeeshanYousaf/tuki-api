@@ -49,6 +49,6 @@ class Api::V1::GuestsController < Api::V1::BaseController
 
     # Only allow a list of trusted parameters through.
     def guest_params
-      params.require(:guest).permit :valid_from, :valid_to
+      params.require(:guest).permit :valid_from, :valid_to, :purpose
     end
 end

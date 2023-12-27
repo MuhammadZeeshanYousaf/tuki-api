@@ -41,7 +41,7 @@ class Api::V1::WorkingGuestsController < Api::V1::BaseController
     end
 
     def working_guest_params
-      params.require(:working_guest).permit :valid_from, :valid_to
+      params.require(:working_guest).permit :valid_from, :valid_to, :purpose
     end
 
     def account_params
