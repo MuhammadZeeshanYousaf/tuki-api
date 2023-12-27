@@ -76,7 +76,9 @@ Rails.application.routes.draw do
         get :dashboard
       end
       resources :tenants, except: :update, concerns: :eliminated
-      resources :guests, except: :update
+      resources :guests, except: :update do
+        get :validate, on: :member
+      end
       resources :working_guests, except: :update
 
 

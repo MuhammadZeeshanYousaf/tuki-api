@@ -1,5 +1,5 @@
 class Api::V1::GuestsController < Api::V1::BaseController
-  before_action :set_guest, only: %i[ show destroy ]
+  before_action :set_guest, only: %i[ show destroy validate ]
 
   # GET /guests
   def index
@@ -35,6 +35,17 @@ class Api::V1::GuestsController < Api::V1::BaseController
     authorize! :destroy, @guest
 
     @guest.user.destroy!
+  end
+
+  # Guard Accessible only
+  # GET /guest/:id/validate
+  def validate
+    if @guest.is_valid?
+      root_key = @guest.type.eql?(WorkingGuest.to_s) ? WorkingGuest.to_s.underscore : false
+      render json: @guest, status: :accepted, root: root_key
+    else
+      render json: { error: 'Guest is not valid for entrance!' }, status: :not_acceptable
+    end
   end
 
   private

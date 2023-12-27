@@ -5,7 +5,12 @@ class Guest < ApplicationRecord
   alias_method :account, :user
   belongs_to :invited_by, class_name: 'User'
   belongs_to :approved_by, class_name: 'User', optional: true
+  validates :user, presence: true, uniqueness: { message: 'Guest already exist' }
   after_create :attach_qr_image
+
+  def is_valid?
+    valid_from <= DateTime.current && valid_to >= DateTime.current if valid_from.present? && valid_to.present?
+  end
 
   protected
 
