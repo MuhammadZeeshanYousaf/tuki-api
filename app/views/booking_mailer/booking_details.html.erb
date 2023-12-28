@@ -1,11 +1,29 @@
 <main>
-  <pre>
-  Hi <%= @user.name %>,
+  <h4>Hi <%= @user.name %>,</h4>
+  <p>You have been invited for the event, following are the details:</p>
+    <hr>
+    <div>
+      <p><strong>Event: </strong></p>
+      <% if @event.banner.attached? %>
+        <img src="<%= @event.banner&.url %>" alt="Event Banner">
+      <% end %>
+      <p><strong><%= @event.name %></strong></p>
+      <p><%= @event.description %></p>
+      <p>Date: <%= @time_slot.date_of_the_day&.strftime('%Y-%m-%d') %></p>
+      <p>Day: <%= @time_slot.day&.capitalize %></p>
+      <p>Timing: <%= @time_slot.start_time.strftime('%H:%M') %> - <%= @time_slot.end_time.strftime('%H:%M') %></p>
+    </div>
+  <br>
+    <div>
+      <p><strong>Booking Validation QR: </strong></p>
+      <img src="<%= @attendee.qr_image&.url %>" alt="Booking QR">
+    </div>
+  <br>
+  <% unless @booker.email.eql? @user.email %>
+      <p><strong>Booker Details:</strong></p>
+      <p>Name: <%= @booker.name %></p>
+      <p>Email: <%= @booker.email %></p>
+      <p>Role: <%= @booker.role_key&.capitalize %></p>
+  <% end %>
 
-  You booking has been confirmed, following are the details:
-
-  ------
-  <%= # @Todo - details here %>
-  ------
-  </pre>
 </main>
