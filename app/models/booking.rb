@@ -28,6 +28,7 @@ class Booking < ApplicationRecord
       end
     end
 
-    handle_asynchronously :email_booking_details
+    # @note - no need to handler async because deliver later uses active jobs by default
+    # handle_asynchronously :email_booking_details
 
 end
