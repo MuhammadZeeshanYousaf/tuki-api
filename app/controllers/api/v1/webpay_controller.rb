@@ -4,7 +4,9 @@ class Api::V1::WebpayController < ApplicationController
   def pay
     if @booking.unpaid? || @booking.in_process?
       if ENV['WEBPAY_ENV'].eql?'production'
-        # set production credentials
+        commerce_code = Rails.application.credentials.dig(:webpay, :commerce_code)
+        api_key = Rails.application.credentials.dig(:webpay, :api_key)
+        environment = ENV['WEBPAY_ENV'].to_sym
       else
         commerce_code = ::Transbank::Common::IntegrationCommerceCodes::WEBPAY_PLUS
         api_key = ::Transbank::Common::IntegrationApiKeys::WEBPAY
