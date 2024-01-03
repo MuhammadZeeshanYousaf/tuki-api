@@ -14,6 +14,8 @@ class Api::V1::AttendeesController < Api::V1::BaseController
       else
         set_attendee
       end
+      @attendee.validation_status_checked_in!
+
       render json: @attendee.booking
 
     elsif request.get?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_27_162018) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_03_160456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -76,6 +76,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_27_162018) do
   create_table "attendees", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "booking_id", null: false
     t.uuid "user_id", null: false
+    t.integer "validation_status", default: 0
     t.index ["booking_id"], name: "index_attendees_on_booking_id"
     t.index ["user_id"], name: "index_attendees_on_user_id"
   end
@@ -152,6 +153,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_27_162018) do
     t.datetime "valid_from", comment: "The Guest is valid from this Date and Time."
     t.datetime "valid_to", comment: "The Guest is valid till this Date and Time."
     t.string "purpose"
+    t.integer "validation_status", default: 0
     t.index ["approved_by_id"], name: "index_guests_on_approved_by_id"
     t.index ["invited_by_id"], name: "index_guests_on_invited_by_id"
     t.index ["user_id"], name: "index_guests_on_user_id"

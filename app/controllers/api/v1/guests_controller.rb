@@ -41,6 +41,7 @@ class Api::V1::GuestsController < Api::V1::BaseController
   # GET /guest/:id/validate
   def validate
     if @guest.is_valid?
+      @guest.validation_status_checked_in!
       root_key = @guest.type.eql?(WorkingGuest.to_s) ? WorkingGuest.to_s.underscore : false
       render json: @guest, status: :accepted, root: root_key
     else

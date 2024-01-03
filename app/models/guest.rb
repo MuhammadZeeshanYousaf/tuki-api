@@ -1,5 +1,6 @@
 class Guest < ApplicationRecord
   include QrAttachable
+  include Validatable
 
   belongs_to :user
   alias_method :account, :user

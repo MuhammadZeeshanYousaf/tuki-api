@@ -1,5 +1,6 @@
 class Attendee < ApplicationRecord
   include QrAttachable
+  include Validatable
 
   belongs_to :booking
   belongs_to :user

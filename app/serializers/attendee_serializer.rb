@@ -1,5 +1,5 @@
 class AttendeeSerializer < ActiveModel::Serializer
-  attributes :qr_image
+  attributes :qr_image, :validation_status
   has_one :user, key: :account
 
   def qr_image
