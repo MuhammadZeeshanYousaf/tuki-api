@@ -12,4 +12,12 @@
 
   ------
   </pre>
+
+  <% if @guest.present? %>
+    <div>
+      <p><strong>Validation QR:</strong></p>
+      <img src="<%= @guest.qr_image&.url %>" alt="Guest QR">
+    </div>
+  <% end %>
+
 </main>

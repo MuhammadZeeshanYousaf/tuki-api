@@ -45,7 +45,7 @@ class User < ApplicationRecord
     end
 
     def can_send_add_user_email?
-      %w(owner co_owner tenant co_tenant).include? self.role_key
+      %w(owner co_owner tenant co_tenant guest working_guest).include? self.role_key
     end
 
     def send_add_user_email
