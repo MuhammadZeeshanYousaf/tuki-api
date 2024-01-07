@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   has_one_attached :avatar
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
+  # :confirmable, :lockable, :timeoutable, :trackable, :rememberable, and :omniauthable
+  devise :database_authenticatable, :registerable, :recoverable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   has_one :assignment, dependent: :destroy
@@ -39,9 +39,10 @@ class User < ApplicationRecord
 
     # Add this method to generate and assign a random password
     def generate_random_password
-      random_password = SecureRandom.hex(4)[0, 8] # Generates a random 8-character hexadecimal string
-      self.password = random_password
-      self.password_confirmation = random_password
+      # random_password = SecureRandom.hex(4)[0, 8] # Generates a random 8-character hexadecimal string
+      generated_password = Devise.friendly_token.first(8)
+      self.password = generated_password
+      self.password_confirmation = generated_password
     end
 
     def can_send_add_user_email?
