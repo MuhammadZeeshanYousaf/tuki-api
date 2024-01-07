@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable, :rememberable, and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :validatable,
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   has_one :assignment, dependent: :destroy
