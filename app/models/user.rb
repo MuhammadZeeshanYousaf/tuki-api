@@ -25,7 +25,7 @@ class User < ApplicationRecord
   has_one :allocation, class_name: 'Event', foreign_key: 'allocated_guard_id'
 
   validates :email, :national_id, presence: true, uniqueness: true
-  delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true
+  delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true, allow_nil: true
   # Random password is generated before saving a new user
   before_save :generate_random_password
   after_create :send_add_user_email, if: :can_send_add_user_email?
