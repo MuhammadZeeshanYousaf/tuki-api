@@ -40,9 +40,11 @@ class User < ApplicationRecord
     # Add this method to generate and assign a random password
     def generate_random_password
       # random_password = SecureRandom.hex(4)[0, 8] # Generates a random 8-character hexadecimal string
-      generated_password = Devise.friendly_token.first(8)
-      self.password = generated_password
-      self.password_confirmation = generated_password
+      if errors.messages[:password].present? && errors.messages[:password].include?("can't be blank")
+        generated_password = Devise.friendly_token.first(8)
+        self.password = generated_password
+        self.password_confirmation = generated_password
+      end
     end
 
     def can_send_add_user_email?
