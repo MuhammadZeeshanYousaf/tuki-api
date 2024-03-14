@@ -27,7 +27,7 @@ class User < ApplicationRecord
   validates :email, :national_id, presence: true, uniqueness: true
   delegate *Role.keys.keys.map { |m| m + '?' }.append(:key), to: :role, prefix: true, allow_nil: true
   # Random password is generated before saving a new user
-  before_save :generate_random_password
+  before_validation :generate_random_password
   after_create :send_add_user_email, if: :can_send_add_user_email?
 
 
@@ -39,8 +39,8 @@ class User < ApplicationRecord
 
     # Add this method to generate and assign a random password
     def generate_random_password
-      # random_password = SecureRandom.hex(4)[0, 8] # Generates a random 8-character hexadecimal string
-      if errors.messages[:password].present? && errors.messages[:password].include?("can't be blank")
+      if password.blank? && !self.persisted?
+        Rails.logger.info('Password automatically generated!')
         generated_password = Devise.friendly_token.first(8)
         self.password = generated_password
         self.password_confirmation = generated_password
@@ -53,6 +53,7 @@ class User < ApplicationRecord
 
     def send_add_user_email
       UserMailer.with(user: self, password: self.password).add_user.deliver_later
+      Rails.logger.info("Email sent to #{self.email} as #{self.role_key}!")
     end
 
 end
